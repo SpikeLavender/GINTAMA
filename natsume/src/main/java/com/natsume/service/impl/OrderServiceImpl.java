@@ -112,9 +112,6 @@ public class OrderServiceImpl implements OrderService {
 			return ResponseVo.error(SYSTEM_ERROR);
 		}
 
-		//
-
-
 		//更新购物车（选中的商品）
 		//redis有事务（打包命令），不能回滚
 		for (Cart cart : carts) {

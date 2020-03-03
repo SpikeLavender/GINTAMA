@@ -17,9 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.natsume.consts.NatsumeConst.CART_REDIS_KEY_TEMPLATE;
 import static com.natsume.enums.ProductStatusEnum.ON_SALE;
@@ -87,15 +86,23 @@ public class CartServiceImpl implements CartService {
 
 		Map<String, String> entries = opsForHash.entries(redisKey);
 
+		Set<Integer> productIdSet = entries.keySet().stream().map(Integer::valueOf).collect(Collectors.toSet());
+
+		List<Product> products = productMapper.selectByProductIdSet(productIdSet);
+
+		Map<Integer, Product> productMap = products.stream()
+				.collect(Collectors.toMap(Product::getId, product -> product));
+
 		boolean selectedAll = true;
 		Integer cartTotalQuantity = 0;
 		BigDecimal cartTotalPrice = BigDecimal.ZERO;
+
 		List<CartProductVo> cartProductVos = new ArrayList<>();
 		for (Map.Entry<String, String> entry : entries.entrySet()) {
 			Integer productId = Integer.valueOf(entry.getKey());
 			Cart cart = JSON.parseObject(entry.getValue(), Cart.class);
-			//todo:需要优化，使用 mysql 里的 in
-			Product product = productMapper.selectByPrimaryKey(productId);
+
+			Product product = productMap.get(productId);
 
 			if (product != null) {
 				CartProductVo cartProductVo = new CartProductVo(productId,
