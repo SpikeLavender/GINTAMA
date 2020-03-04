@@ -2,6 +2,18 @@ package com.natsume.enums;
 
 import lombok.Getter;
 
+/**
+ * 错误码定义:
+ * 1xxxxx: 系统级别的错误
+ * 40xxxx: API参数校验失败
+ * 50xxxx: 后台业务校验失败
+ * xx1xxx: 用户模块
+ * xx2xxx: 商品模块
+ * xx3xxx: 购物车模块
+ * xx4xxx: 收货地址模块
+ * xx5xxx: 订单模块
+ *
+ */
 @Getter
 public enum ResponseEnum {
 	/**
@@ -11,35 +23,35 @@ public enum ResponseEnum {
 	/**
 	 * 参数为空
 	 */
-	PARAM_ERROR(400001, "参数错误"),
+	PARAM_ERROR(400000, "参数错误"),
 
-	USERNAME_EXIST(400002, "用户名已注册"),
+	USERNAME_EXIST(501001, "用户名已注册"),
 
-	EMAIL_EXIST(400003, "邮箱已注册"),
+	EMAIL_EXIST(501002, "邮箱已注册"),
 
-	USERNAME_OR_PASSWORD_ERROR(403001, "用户名或密码错误"),
+	USERNAME_OR_PASSWORD_ERROR(501003, "用户名或密码错误"),
 
-	NEED_LOGIN(403002, "用户未登录, 请先登录"),
+	NEED_LOGIN(501004, "用户未登录, 请先登录"),
 
-	PRODUCT_OFF_SALE_OR_DELETE(405001, "商品已下架或删除"),
+	PRODUCT_OFF_SALE_OR_DELETE(502001, "商品已下架或删除"),
 
-	PRODUCT_NOT_EXIST(405002, "商品不存在"),
+	PRODUCT_NOT_EXIST(502002, "商品不存在"),
 
-	PRODUCT_STOCK_ERROR(405003, "库存不正确"),
+	PRODUCT_STOCK_ERROR(502003, "库存不正确"),
 
-	CART_PRODUCT_NOT_EXIST(405004, "购物车无此商品"),
+	CART_PRODUCT_NOT_EXIST(503001, "购物车无此商品"),
 
-	DELETE_SHIPPING_FAIL(405006, "删除收货地址失败"),
+	DELETE_SHIPPING_FAIL(504001, "删除收货地址失败"),
 
-	SHIPPING_NOT_EXIST(405007, "删除收货地址失败"),
+	SHIPPING_NOT_EXIST(504002, "收货地址不存在"),
 
-	CART_SELECTED_IS_EMPTY(405008, "请选择商品后下单"),
+	CART_SELECTED_IS_EMPTY(505001, "请选择商品后下单"),
 
-	ORDER_NOT_EXIST(405009, "订单不存在"),
+	ORDER_NOT_EXIST(505002, "订单不存在"),
 
-	ORDER_STATUS_ERROR(405010, "订单状态有误"),
+	ORDER_STATUS_ERROR(505003, "订单状态有误"),
 
-	SYSTEM_ERROR(500, "服务端错误"),
+	SYSTEM_ERROR(100000, "服务端错误"),
 
 	;
 

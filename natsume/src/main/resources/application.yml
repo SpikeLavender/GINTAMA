@@ -42,6 +42,6 @@ pagehelper:
 server:
   servlet:
     session:
-      timeout: 120 # s
+      timeout: 1200 # s
 
   port: 8081

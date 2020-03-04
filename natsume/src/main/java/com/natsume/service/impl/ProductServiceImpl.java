@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 import static com.natsume.enums.ProductStatusEnum.DELETE;
 import static com.natsume.enums.ProductStatusEnum.OFF_SALE;
+import static com.natsume.enums.ResponseEnum.PRODUCT_NOT_EXIST;
 import static com.natsume.enums.ResponseEnum.PRODUCT_OFF_SALE_OR_DELETE;
 
 @Service
@@ -60,6 +61,10 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ResponseVo<ProductDetailVo> detail(Integer productId) {
 		Product product = productMapper.selectByPrimaryKey(productId);
+
+		if (product == null) {
+			return ResponseVo.error(PRODUCT_NOT_EXIST);
+		}
 
 		if (product.getStatus().equals(OFF_SALE.getCode()) || product.getStatus().equals(DELETE.getCode())) {
 			return ResponseVo.error(PRODUCT_OFF_SALE_OR_DELETE);

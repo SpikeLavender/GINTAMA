@@ -1,6 +1,5 @@
 package com.natsume.entity;
 
-import com.natsume.enums.RoleEnum;
 import lombok.Data;
 
 import java.util.Date;

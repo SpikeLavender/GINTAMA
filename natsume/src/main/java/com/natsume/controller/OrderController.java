@@ -26,7 +26,7 @@ public class OrderController {
 		return orderService.create(user.getId(), form.getShippingId());
 	}
 
-	@GetMapping(" /orders")
+	@GetMapping("/orders")
 	public ResponseVo<PageInfo> list(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
 	                                 @RequestParam(required = false, defaultValue = "10") Integer pageSize,
 	                                 HttpSession session) {
@@ -34,7 +34,7 @@ public class OrderController {
 		return orderService.list(user.getId(), pageNum, pageSize);
 	}
 
-	@GetMapping(" /orders/{orderNo}")
+	@GetMapping("/orders/{orderNo}")
 	public ResponseVo<OrderVo> detail(@PathVariable String orderNo, HttpSession session) {
 		User user = (User) session.getAttribute(CURRENT_USER);
 		return orderService.detail(user.getId(), orderNo);

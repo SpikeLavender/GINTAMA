@@ -52,7 +52,6 @@ public class UserController {
 		return ResponseVo.success(user);
 	}
 
-	//todo 判断登录状态，拦截器
 	@PostMapping("/user/logout")
 	public ResponseVo<User> logout(HttpSession session) {
 		log.info("logout sessionId = {}", session.getId());
