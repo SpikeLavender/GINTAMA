@@ -19,7 +19,7 @@ public enum ResponseEnum {
 	/**
 	 * 成功状态码
 	 */
-	SUCCESS(200, "成功"),
+	SUCCESS(0, "成功"),
 	/**
 	 * 参数为空
 	 */
