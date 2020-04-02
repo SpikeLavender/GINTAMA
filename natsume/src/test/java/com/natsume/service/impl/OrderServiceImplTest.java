@@ -30,7 +30,7 @@ public class OrderServiceImplTest extends ApplicationTests {
 
 	private Integer uId = 1;
 
-	private Integer shippingId = 6;
+	private Integer shippingId = 4;
 
 	private Integer productId = 29;
 

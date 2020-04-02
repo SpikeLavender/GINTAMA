@@ -18,9 +18,6 @@ public class AchievementServiceImplTest extends ApplicationTests {
     @Autowired
     private AchievementService achievementService;
 
-    @Autowired
-    private AchievementServiceImpl achievementServiceImpl;
-
     @Test
     public void list() {
         ResponseVo<AchievementVo> responseVo = achievementService.list(1);
@@ -32,9 +29,12 @@ public class AchievementServiceImplTest extends ApplicationTests {
     }
 
     @Test
-    public void calcAchievement() {
-        List<Achievement> totalAchievement = achievementServiceImpl.createWeekAchievement(1);
-        achievementServiceImpl.updateAchievementInDB(totalAchievement);
+    public void weekAchievement() {
+        achievementService.weekAchievement();
+    }
 
+    @Test
+    public void curWeekAchievement() {
+        achievementService.curWeekAchievement();
     }
 }

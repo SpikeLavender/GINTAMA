@@ -216,19 +216,6 @@ public class DateUtils {
             if(listWeekOrMonth.size() % 2 != 0){
                 listWeekOrMonth.add(dateFormat.format(eCalendar.getTime()));
             }
-        }else{
-            while(sCalendar.getTime().getTime() < eCalendar.getTime().getTime()){
-                if(bool || sCalendar.get(Calendar.DAY_OF_MONTH)==1 ||
-                        sCalendar.get(Calendar.DAY_OF_MONTH) == sCalendar.getActualMaximum(Calendar.DAY_OF_MONTH)){
-                    listWeekOrMonth.add(dateFormat.format(sCalendar.getTime()));
-                    bool = false;
-                }
-                sCalendar.add(Calendar.DAY_OF_MONTH, 1);
-            }
-            listWeekOrMonth.add(dateFormat.format(eCalendar.getTime()));
-            if(listWeekOrMonth.size() % 2 != 0){
-                listWeekOrMonth.add(dateFormat.format(eCalendar.getTime()));
-            }
         }
 
         return listWeekOrMonth;

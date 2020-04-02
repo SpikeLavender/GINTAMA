@@ -18,4 +18,8 @@ public interface AchievementService {
     ResponseVo<ProfitVo> profit(Integer uId);
 
     ResponseVo<PageInfo> detail(Integer uId, Integer pageNum, Integer pageSize);
+
+    void weekAchievement();
+
+    void curWeekAchievement();
 }
