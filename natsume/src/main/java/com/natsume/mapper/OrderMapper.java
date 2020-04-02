@@ -1,8 +1,10 @@
 package com.natsume.mapper;
 
 import com.natsume.entity.Order;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 public interface OrderMapper {
     int deleteByPrimaryKey(Integer id);
@@ -20,4 +22,6 @@ public interface OrderMapper {
 	List<Order> selectByUid(Integer id);
 
 	Order selectByOrderNo(String orderNo);
+
+    List<Order> selectByUidSet(@Param("uIdSet") Set<Integer> uIdSet);
 }

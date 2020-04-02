@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.natsume.consts.NatsumeConst.ROOT_PARENT_ID;
+import static com.natsume.consts.NatsumeConst.ROOT_CATEGORY_PARENT_ID;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -34,7 +34,7 @@ public class CategoryServiceImpl implements CategoryService {
 		//查出parent_id=0
 		// lambda + stream
 		List<CategoryVo> categoryVos = categories.stream()
-				.filter(e -> e.getParentId().equals(ROOT_PARENT_ID))
+				.filter(e -> e.getParentId().equals(ROOT_CATEGORY_PARENT_ID))
 				.map(this::category2CategoryVo)
 				.sorted(Comparator.comparing(CategoryVo::getSortOrder).reversed())
 				.collect(Collectors.toList());

@@ -33,7 +33,13 @@ public class UserServiceImpl implements UserService {
 			return ResponseVo.error(EMAIL_EXIST);
 		}
 
-		user.setRole(RoleEnum.ADMIN.getCode());
+		//检验推广父id是否有效
+        if (user.getParentId() != null && userMapper.countById(user.getParentId()) <= 0) {
+            //todo: 设置为0，是否需要提示异常待定
+            user.setParentId(0);
+        }
+
+        user.setRole(RoleEnum.ADMIN.getCode());
 		//MD5摘要算法(Spring 自带)
 		user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes(StandardCharsets.UTF_8)));
 

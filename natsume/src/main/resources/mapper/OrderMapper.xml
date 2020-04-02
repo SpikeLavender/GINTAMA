@@ -210,4 +210,17 @@
 		from tb_order
 		where order_no = #{orderNo,jdbcType=VARCHAR}
 	</select>
+	<select id="selectByUidSet" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_order
+		<where>
+			<if test="uIdSet.size() > 0">
+				user_id in
+				<foreach collection="uIdSet" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</select>
 </mapper>

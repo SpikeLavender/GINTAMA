@@ -11,12 +11,50 @@ CREATE TABLE tb_user(
                           `question` varchar(100) DEFAULT NULL COMMENT '找回密码问题',
                           `answer` varchar(100) DEFAULT NULL COMMENT '找回密码答案',
                           `role` int(4) NOT NULL COMMENT '角色0-管理员, 1-普通用户',
+                          `parent_id` int(11) NOT NULL COMMENT '父用户Id, 当id=0时说明是根节点',
                           `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                           `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
                           PRIMARY KEY (id),
                           UNIQUE KEY `user_name_unique` (`username`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
+-- 用户佣金记录表
+CREATE TABLE tb_commission_item(
+                              `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '佣金记录表Id',
+                              `user_id` int(11) NOT NULL COMMENT '用户表Id',
+                              `level` tinyint(1) DEFAULT '1' COMMENT '业绩等级',
+                              `commission` decimal(20,2) NOT NULL COMMENT '佣金, 单位-元保留两位小数',
+                              `achievement` decimal(20,2) NOT NULL COMMENT '总业绩, 单位-元保留两位小数',
+                              `self_achievement` decimal(20,2) NOT NULL COMMENT '直推业绩, 单位-元保留两位小数',
+                              `sub_achievement` decimal(20,2) NOT NULL COMMENT '下级业绩, 单位-元保留两位小数',
+                              `status` tinyint(1) DEFAULT '1' COMMENT '领取状态, 0-未到领取时间, 1-可领取, 2- 已领取',
+                              `start_pay_time` datetime DEFAULT NULL COMMENT '最早可领取时间',
+                              `pay_time` datetime DEFAULT NULL COMMENT '领取时间',
+                              `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                              `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+                              PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- 用户总业绩表
+CREATE TABLE tb_achievement(
+                              `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '业绩表Id',
+                              `user_id` int(11) NOT NULL COMMENT '用户表Id',
+                              `parent_id` int(11) NOT NULL COMMENT '父用户表Id',
+                              `level` int(4) DEFAULT '1' COMMENT '业绩等级',
+                              `profit` decimal(20,2) NOT NULL COMMENT '佣金, 单位-元保留两位小数',
+                              `achievement` decimal(20,2) NOT NULL COMMENT '总业绩, 单位-元保留两位小数',
+                              `self_achievement` decimal(20,2) NOT NULL COMMENT '直推业绩, 单位-元保留两位小数',
+                              `sub_achievement` decimal(20,2) NOT NULL COMMENT '下级业绩, 单位-元保留两位小数',
+                              `start_time` datetime DEFAULT NULL COMMENT '周业绩开始时间',
+                              `end_time` datetime DEFAULT NULL COMMENT '周业绩结束时间',
+                              `complete_time` datetime DEFAULT NULL COMMENT '业绩结清时间',
+                              `status` int(4) DEFAULT '0' COMMENT '结算状态, 0-未到领取时间, 1-可领取, 2- 已领取',
+                              `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                              `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+                              PRIMARY KEY (id),
+                              UNIQUE KEY `uqe_user_id_star_time` (`user_id`, `start_time`),
+                              INDEX `index_user_id` (`user_id`) COMMENT '查询索引'
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- 分类表
 DROP TABLE IF EXISTS `tb_category`;
@@ -178,9 +216,48 @@ INSERT INTO `tb_shipping` (`id`, `user_id`, `receiver_name`, `receiver_phone`, `
 VALUES
 (4,1,'何腾蛟','010','18688888888','陕西','西安市','碑林区','西安交通大学','710049');
 
-INSERT INTO `tb_user` (`id`, `username`, `password`, `email`, `phone`, `question`, `answer`, `role`)
+INSERT INTO `tb_user` (`id`, `username`, `password`, `email`, `phone`, `question`, `answer`, `role`, `parent_id`)
 VALUES
-(1,'admin','21232F297A57A5A743894A0E4A801FC3','admin@qq.com',NULL,NULL,NULL,0);
+(1,'admin1','21232F297A57A5A743894A0E4A801FC3','admin@qq.com',NULL,NULL,NULL,0, 0);
+
+INSERT INTO `tb_user` (`id`, `username`, `password`, `email`, `phone`, `question`, `answer`, `role`, `parent_id`)
+VALUES
+(2,'admin2','21232F297A57A5A743894A0E4A801FC3','admin@qq.com',NULL,NULL,NULL,0, 0);
+
+INSERT INTO `tb_user` (`id`, `username`, `password`, `email`, `phone`, `question`, `answer`, `role`, `parent_id`)
+VALUES
+(3,'admin3','21232F297A57A5A743894A0E4A801FC3','admin@qq.com',NULL,NULL,NULL,0, 1);
+
+INSERT INTO `tb_user` (`id`, `username`, `password`, `email`, `phone`, `question`, `answer`, `role`, `parent_id`)
+VALUES
+(4,'admin4','21232F297A57A5A743894A0E4A801FC3','admin@qq.com',NULL,NULL,NULL,0, 1);
+
+INSERT INTO `tb_user` (`id`, `username`, `password`, `email`, `phone`, `question`, `answer`, `role`, `parent_id`)
+VALUES
+(5,'admin5','21232F297A57A5A743894A0E4A801FC3','admin@qq.com',NULL,NULL,NULL,0, 3);
+
+INSERT INTO `tb_user` (`id`, `username`, `password`, `email`, `phone`, `question`, `answer`, `role`, `parent_id`)
+VALUES
+(6,'admin6','21232F297A57A5A743894A0E4A801FC3','admin@qq.com',NULL,NULL,NULL,0, 3);
 
 
+INSERT INTO `natsume`.`tb_order`(`id`, `order_no`, `user_id`, `shipping_id`, `payment`, `payment_type`, `postage`, `status`, `payment_time`, `send_time`, `end_time`, `close_time`)
+VALUES (1, '1583423427696', 1, 4, 2000.00, 1, 0, 50, NULL, NULL, '2020-03-25 15:50:27', '2020-03-31 04:56:22');
 
+INSERT INTO `natsume`.`tb_order`(`id`, `order_no`, `user_id`, `shipping_id`, `payment`, `payment_type`, `postage`, `status`, `payment_time`, `send_time`, `end_time`, `close_time`)
+VALUES (2, '1523423427396', 2, 4, 4000.00, 1, 0, 50, NULL, NULL, '2020-03-26 15:50:27', '2020-03-31 04:56:22');
+
+INSERT INTO `natsume`.`tb_order`(`id`, `order_no`, `user_id`, `shipping_id`, `payment`, `payment_type`, `postage`, `status`, `payment_time`, `send_time`, `end_time`, `close_time`)
+VALUES (3, '1583923427696', 3, 4, 6000.00, 1, 0, 50, NULL, NULL, '2020-03-27 15:50:27', '2020-03-31 04:56:22');
+
+INSERT INTO `natsume`.`tb_order`(`id`, `order_no`, `user_id`, `shipping_id`, `payment`, `payment_type`, `postage`, `status`, `payment_time`, `send_time`, `end_time`, `close_time`)
+VALUES (4, '1583423227696', 3, 4, 9000.00, 1, 0, 50, NULL, NULL, '2020-03-31 15:50:27', '2020-03-31 04:56:22');
+
+INSERT INTO `natsume`.`tb_order`(`id`, `order_no`, `user_id`, `shipping_id`, `payment`, `payment_type`, `postage`, `status`, `payment_time`, `send_time`, `end_time`, `close_time`)
+VALUES (5, '1583413427696', 4, 4, 10000.00, 1, 0, 50, NULL, NULL, '2020-03-26 15:50:27', '2020-03-31 04:56:22');
+
+INSERT INTO `natsume`.`tb_order`(`id`, `order_no`, `user_id`, `shipping_id`, `payment`, `payment_type`, `postage`, `status`, `payment_time`, `send_time`, `end_time`, `close_time`)
+VALUES (6, '1583433427696', 5, 4, 3000.00, 1, 0, 50, NULL, NULL, '2020-03-26 15:50:27', '2020-03-31 04:56:22');
+
+INSERT INTO `natsume`.`tb_order`(`id`, `order_no`, `user_id`, `shipping_id`, `payment`, `payment_type`, `postage`, `status`, `payment_time`, `send_time`, `end_time`, `close_time`)
+VALUES (7, '1583426427696', 6, 4, 7000.00, 1, 0, 50, NULL, NULL, '2020-03-26 15:50:27', '2020-03-31 04:56:22');
