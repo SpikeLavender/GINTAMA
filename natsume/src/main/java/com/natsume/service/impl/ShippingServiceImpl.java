@@ -3,7 +3,6 @@ package com.natsume.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.natsume.entity.Shipping;
-import com.natsume.enums.ResponseEnum;
 import com.natsume.form.ShippingForm;
 import com.natsume.mapper.ShippingMapper;
 import com.natsume.service.ShippingService;
@@ -12,9 +11,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.natsume.enums.ResponseEnum.DELETE_SHIPPING_FAIL;
 import static com.natsume.enums.ResponseEnum.SYSTEM_ERROR;
@@ -25,16 +26,28 @@ public class ShippingServiceImpl implements ShippingService {
 	@Autowired
 	private ShippingMapper shippingMapper;
 
-	@Override
+    @Override
 	public ResponseVo<Map<String, Integer>> add(Integer uId, ShippingForm form) {
-		Shipping shipping = new Shipping();
-		BeanUtils.copyProperties(form, shipping);
-		shipping.setUserId(uId);
-		int row = shippingMapper.insertSelective(shipping);
-		if (row == 0) {
-			return ResponseVo.error(SYSTEM_ERROR);
-		}
 
+        Shipping shipping = new Shipping();
+        BeanUtils.copyProperties(form, shipping);
+        shipping.setUserId(uId);
+        shipping.setIsDefault(Boolean.TRUE);
+
+        int row = shippingMapper.insertSelective(shipping);
+
+        if (row <= 0) {
+            return ResponseVo.error(SYSTEM_ERROR);
+        }
+
+        List<Shipping> shippings = shippingMapper.selectByUid(uId).stream()
+                .filter(e -> e.getIsDefault() && !e.getId().equals(shipping.getId()))
+                .peek(e -> e.setIsDefault(Boolean.FALSE)).collect(Collectors.toList());
+
+        if (!shippings.isEmpty() && shippingMapper.updateBatch(shippings) != shippings.size() * 2) {
+            return ResponseVo.error(SYSTEM_ERROR);
+        }
+        //判断是否为默认，是的话更新其他的为false
 		Map<String, Integer> map = new HashMap<>();
 		map.put("shippingId", shipping.getId());
 		return ResponseVo.success(map);
@@ -51,12 +64,24 @@ public class ShippingServiceImpl implements ShippingService {
 
 	@Override
 	public ResponseVo update(Integer uId, Integer shippingId, ShippingForm form) {
-		Shipping shipping = new Shipping();
-		BeanUtils.copyProperties(form, shipping);
-		shipping.setUserId(uId);
-		shipping.setId(shippingId);
-		int row = shippingMapper.updateByPrimaryKeySelective(shipping);
-		if (row ==0 ) {
+        Shipping shipping = new Shipping();
+        BeanUtils.copyProperties(form, shipping);
+        shipping.setUserId(uId);
+        shipping.setId(shippingId);
+
+        List<Shipping> shippings = new ArrayList<>();
+
+        if (form.getIsDefault()) {
+            shippings = shippingMapper.selectByUid(uId).stream()
+                    .filter(e -> e.getIsDefault() && !e.getId().equals(shippingId))
+                    .peek(e -> e.setIsDefault(Boolean.FALSE))
+                    .collect(Collectors.toList());
+        }
+
+        shippings.add(shipping);
+
+		int row = shippingMapper.updateBatch(shippings);
+		if (row <= shippings.size()) {
 			return ResponseVo.error(SYSTEM_ERROR);
 		}
 		return ResponseVo.success();

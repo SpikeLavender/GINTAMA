@@ -17,5 +17,5 @@ public class UserRegisterForm {
 	private String password;
 
 	@NotBlank
-	private String email;
+	private Integer parentId;
 }

@@ -3,13 +3,13 @@ package com.natsume.entity;
 import lombok.Data;
 
 import java.util.Date;
-
 @Data
 public class Shipping {
-
     private Integer id;
 
     private Integer userId;
+
+    private Boolean isDefault;
 
     private String receiverName;
 
@@ -30,5 +30,4 @@ public class Shipping {
     private Date createTime;
 
     private Date updateTime;
-
 }

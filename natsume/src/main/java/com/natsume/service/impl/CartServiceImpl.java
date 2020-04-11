@@ -36,7 +36,7 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public ResponseVo<CartVo> add(Integer uId, CartAddForm form) {
 
-		Integer quantity = 1;
+		Integer quantity = form.getQuantity();
 
 		Product product = productMapper.selectByPrimaryKey(form.getProductId());
 
@@ -51,7 +51,7 @@ public class CartServiceImpl implements CartService {
 		}
 
 		//商品库存是否充足
-		if (product.getStock() <= 0) {
+		if (product.getStock() < quantity) {
 			return ResponseVo.error(PRODUCT_STOCK_ERROR);
 		}
 
@@ -68,7 +68,8 @@ public class CartServiceImpl implements CartService {
 		} else {
 			//已经有了，数量 +1
 			cart = JSON.parseObject(value, Cart.class);
-			cart.setQuantity(cart.getQuantity() + 1);
+			cart.setQuantity(cart.getQuantity() + quantity);
+            cart.setProductSelected(form.getSelected());
 		}
 
 		opsForHash.put(redisKey, String.valueOf(product.getId()), JSON.toJSONString(cart));
@@ -95,6 +96,7 @@ public class CartServiceImpl implements CartService {
 
 		boolean selectedAll = true;
 		Integer cartTotalQuantity = 0;
+		Integer cartSelectedQuantity = 0;
 		BigDecimal cartTotalPrice = BigDecimal.ZERO;
 
 		List<CartProductVo> cartProductVos = new ArrayList<>();
@@ -124,6 +126,8 @@ public class CartServiceImpl implements CartService {
 				//计算总价，只计算选中的
 				if (cart.getProductSelected()) {
 					cartTotalPrice = cartTotalPrice.add(cartProductVo.getProductTotalPrice());
+					//只计算选中的
+                    cartSelectedQuantity += cartProductVo.getQuantity();
 				}
 			}
 
@@ -134,8 +138,24 @@ public class CartServiceImpl implements CartService {
 		cartVo.setSelectedAll(selectedAll);
 		cartVo.setCartTotalPrice(cartTotalPrice);
 		cartVo.setCartTotalQuantity(cartTotalQuantity);
+		cartVo.setCartSelectedQuantity(cartSelectedQuantity);
 		return ResponseVo.success(cartVo);
 	}
+
+    @Override
+    public ResponseVo<Boolean> exist(Integer uId, Integer productId) {
+
+        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uId);
+        String value = opsForHash.get(redisKey, String.valueOf(productId));
+
+        if (StringUtils.isEmpty(value)) {
+            //没有该商品, 报错
+            return ResponseVo.success(false);
+        }
+        //已经有了
+        return ResponseVo.success(true);
+    }
 
 	@Override
 	public ResponseVo<CartVo> update(Integer uId, Integer productId, CartUpdateForm form) {
@@ -205,13 +225,21 @@ public class CartServiceImpl implements CartService {
 		return list(uId);
 	}
 
-	@Override
-	public ResponseVo<Integer> sum(Integer uId) {
-		Integer sum = listForCart(uId).stream()
-				.map(Cart::getQuantity)
-				.reduce(0, Integer::sum);
-		return ResponseVo.success(sum);
-	}
+//	//item
+//	@Override
+//	public ResponseVo<Integer> sum(Integer uId) {
+//		Integer sum = listForCart(uId).stream()
+//				.map(Cart::getQuantity)
+//				.reduce(0, Integer::sum);
+//		return ResponseVo.success(sum);
+//	}
+
+    //item
+    @Override
+    public ResponseVo<Integer> sum(Integer uId) {
+        Integer sum = listForCart(uId).size();
+        return ResponseVo.success(sum);
+    }
 
 	public List<Cart> listForCart(Integer uId) {
 		HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();

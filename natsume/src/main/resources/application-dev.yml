@@ -3,7 +3,7 @@ spring:
   datasource:
     url: jdbc:mysql://49.232.146.162:3306/natsume?characterEncoding=utf-8&serverTimezone=UTC&useSSL=false
     username: root
-    password: 123456
+    password: U2FsdGVkX18kY9pA6bwGYP/4xavO576XOCjgKjQbL48=
     driver-class-name: com.mysql.jdbc.Driver
   flyway:
     enabled: false
@@ -29,7 +29,6 @@ mybatis:
   #配置mybatis映射配置文件中实体类别名
   type-aliases-package: com.natsume.entity
 
-
 # pagehelper 配置
 pagehelper:
   auto-dialect: true
@@ -45,7 +44,10 @@ scheduled:
     cron: "0 */30 * * * ?"
 
 
-
+wx:
+  appId: wx18cb444312117ba8
+  mchKey: d743bf233156d3c019c7d5f732f860ff
+  openIdUrl: https://api.weixin.qq.com/sns/jscode2session
 
 server:
   servlet:

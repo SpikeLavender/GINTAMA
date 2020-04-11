@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:mysql://49.232.146.162:3306/natsume?characterEncoding=utf-8&serverTimezone=UTC
     username: root
-    password: 123456
+    password: U2FsdGVkX18kY9pA6bwGYP/4xavO576XOCjgKjQbL48=
     driver-class-name: com.mysql.jdbc.Driver
   rabbitmq:
     addresses: 49.232.146.162
@@ -16,7 +16,7 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.totoro.mapper
+  type-aliases-package: com.totoro.entity
 
 wx:
   appId: wxd898fcb01713c658

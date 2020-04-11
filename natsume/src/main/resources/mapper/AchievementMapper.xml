@@ -43,7 +43,7 @@
       #{endTime,jdbcType=TIMESTAMP}, #{completeTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.natsume.entity.Achievement">
+  <insert id="insertSelective" parameterType="com.natsume.entity.Achievement" useGeneratedKeys="true" keyProperty="id">
     insert into tb_achievement
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -281,8 +281,7 @@
 		sub_achievement, start_time, end_time
 		)
 		values
-		<foreach collection="list" item="achievement" index="index"
-		         separator=",">
+		<foreach collection="list" item="achievement" index="index" separator=",">
 			(#{achievement.id,jdbcType=INTEGER}, #{achievement.userId,jdbcType=INTEGER}, #{achievement.parentId,jdbcType=INTEGER},
 			#{achievement.level,jdbcType=INTEGER}, #{achievement.profit,jdbcType=DECIMAL}, #{achievement.achievement,jdbcType=DECIMAL},
 			#{achievement.selfAchievement,jdbcType=DECIMAL}, #{achievement.subAchievement,jdbcType=DECIMAL},
@@ -290,8 +289,11 @@
 			)
 		</foreach>
 		ON DUPLICATE KEY UPDATE
-		user_id=values(user_id),
-		end_time=values(end_time)
+		level = values(level),
+		profit = values(profit),
+		achievement = values(achievement),
+		self_achievement = values(self_achievement),
+		sub_achievement = values(sub_achievement),
 	</update>
 	<insert id="replaceBatch" parameterType="list">
 		replace into tb_achievement (id, user_id, parent_id,

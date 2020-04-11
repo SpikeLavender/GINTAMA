@@ -3,6 +3,7 @@ package com.natsume.controller;
 import com.natsume.entity.User;
 import com.natsume.form.UserLoginForm;
 import com.natsume.form.UserRegisterForm;
+import com.natsume.form.WeChartForm;
 import com.natsume.service.UserService;
 import com.natsume.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +45,17 @@ public class UserController {
 		log.info("login sessionId = {}", session.getId());
 		return userResponseVo;
 	}
+
+    @PostMapping("/user/wechart")
+    public ResponseVo<User> wechart(@Valid @RequestBody WeChartForm userForm, HttpSession session) {
+
+        ResponseVo<User> userResponseVo = userService.wxLogin(userForm.getUserCode());
+
+        //设置 Session
+        session.setAttribute(CURRENT_USER, userResponseVo.getData());
+        log.info("login sessionId = {}", session.getId());
+        return userResponseVo;
+    }
 
 	@GetMapping("/user")
 	public ResponseVo<User> login(HttpSession session) {

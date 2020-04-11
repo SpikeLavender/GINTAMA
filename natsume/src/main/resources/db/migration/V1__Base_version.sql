@@ -18,23 +18,6 @@ CREATE TABLE tb_user(
                           UNIQUE KEY `user_name_unique` (`username`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
--- 用户佣金记录表
-CREATE TABLE tb_commission_item(
-                              `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '佣金记录表Id',
-                              `user_id` int(11) NOT NULL COMMENT '用户表Id',
-                              `level` tinyint(1) DEFAULT '1' COMMENT '业绩等级',
-                              `commission` decimal(20,2) NOT NULL COMMENT '佣金, 单位-元保留两位小数',
-                              `achievement` decimal(20,2) NOT NULL COMMENT '总业绩, 单位-元保留两位小数',
-                              `self_achievement` decimal(20,2) NOT NULL COMMENT '直推业绩, 单位-元保留两位小数',
-                              `sub_achievement` decimal(20,2) NOT NULL COMMENT '下级业绩, 单位-元保留两位小数',
-                              `status` tinyint(1) DEFAULT '1' COMMENT '领取状态, 0-未到领取时间, 1-可领取, 2- 已领取',
-                              `start_pay_time` datetime DEFAULT NULL COMMENT '最早可领取时间',
-                              `pay_time` datetime DEFAULT NULL COMMENT '领取时间',
-                              `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                              `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
-                              PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-
 -- 用户总业绩表
 CREATE TABLE tb_achievement(
                               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '业绩表Id',
@@ -62,7 +45,7 @@ CREATE TABLE tb_category(
                         `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '类别Id',
                         `parent_id` int(11) DEFAULT NULL COMMENT '父类别id当id=0时说明是根节点, 一级类别',
                         `name` varchar(50) DEFAULT NULL COMMENT '类别名称',
-                        `status` tinyint(1) DEFAULT '1' COMMENT '类别状态1-正常, 2-已废弃',
+                        `status` int(4) DEFAULT '1' COMMENT '类别状态1-正常, 2-已废弃',
                         `sort_order` int(4) NOT NULL DEFAULT '1' COMMENT '数字越大，优先级越高',
                         `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                         `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -154,6 +137,7 @@ DROP TABLE IF EXISTS `tb_shipping`;
 CREATE TABLE `tb_shipping` (
                                  `id` int(11) NOT NULL AUTO_INCREMENT,
                                  `user_id` int(11) DEFAULT NULL COMMENT '用户id',
+                                 `is_default` tinyint(1) DEFAULT true COMMENT '是否默认地址',
                                  `receiver_name` varchar(20) DEFAULT NULL COMMENT '收货姓名',
                                  `receiver_phone` varchar(20) DEFAULT NULL COMMENT '收货固定电话',
                                  `receiver_mobile` varchar(20) DEFAULT NULL COMMENT '收货移动电话',
@@ -261,3 +245,11 @@ VALUES (6, '1583433427696', 5, 4, 3000.00, 1, 0, 50, NULL, NULL, '2020-03-26 15:
 
 INSERT INTO `natsume`.`tb_order`(`id`, `order_no`, `user_id`, `shipping_id`, `payment`, `payment_type`, `postage`, `status`, `payment_time`, `send_time`, `end_time`, `close_time`)
 VALUES (7, '1583426427696', 6, 4, 7000.00, 1, 0, 50, NULL, NULL, '2020-03-26 15:50:27', '2020-03-31 04:56:22');
+
+INSERT INTO `natsume`.`tb_shipping`(`user_id`, `receiver_name`, `receiver_phone`, `receiver_mobile`, `receiver_province`, `receiver_city`, `receiver_district`, `receiver_address`, `receiver_zip`, `create_time`, `update_time`) VALUES (1, '何腾蛟', '010', '18688888888', '陕西', '西安市', '碑林区', '西安交通大学', '710049', '2020-04-01 01:59:14', '2020-04-01 01:59:14');
+INSERT INTO `natsume`.`tb_shipping`(`user_id`, `receiver_name`, `receiver_phone`, `receiver_mobile`, `receiver_province`, `receiver_city`, `receiver_district`, `receiver_address`, `receiver_zip`, `create_time`, `update_time`) VALUES (2, '何腾蛟', '010', '18688888888', '陕西', '西安市', '碑林区', '西安交通大学', '710049', '2020-04-01 01:59:14', '2020-04-01 01:59:14');
+INSERT INTO `natsume`.`tb_shipping`(`user_id`, `receiver_name`, `receiver_phone`, `receiver_mobile`, `receiver_province`, `receiver_city`, `receiver_district`, `receiver_address`, `receiver_zip`, `create_time`, `update_time`) VALUES (3, '何腾蛟', '010', '18688888888', '陕西', '西安市', '碑林区', '西安交通大学', '710049', '2020-04-01 01:59:14', '2020-04-01 01:59:14');
+INSERT INTO `natsume`.`tb_shipping`(`user_id`, `receiver_name`, `receiver_phone`, `receiver_mobile`, `receiver_province`, `receiver_city`, `receiver_district`, `receiver_address`, `receiver_zip`, `create_time`, `update_time`) VALUES (4, '何腾蛟', '010', '18688888888', '陕西', '西安市', '碑林区', '西安交通大学', '710049', '2020-04-01 01:59:14', '2020-04-01 01:59:14');
+INSERT INTO `natsume`.`tb_shipping`(`user_id`, `receiver_name`, `receiver_phone`, `receiver_mobile`, `receiver_province`, `receiver_city`, `receiver_district`, `receiver_address`, `receiver_zip`, `create_time`, `update_time`) VALUES (5, '何腾蛟', '010', '18688888888', '陕西', '西安市', '碑林区', '西安交通大学', '710049', '2020-04-01 01:59:14', '2020-04-01 01:59:14');
+INSERT INTO `natsume`.`tb_shipping`(`user_id`, `receiver_name`, `receiver_phone`, `receiver_mobile`, `receiver_province`, `receiver_city`, `receiver_district`, `receiver_address`, `receiver_zip`, `create_time`, `update_time`) VALUES (6, '何腾蛟', '010', '18688888888', '陕西', '西安市', '碑林区', '西安交通大学', '710049', '2020-04-01 01:59:14', '2020-04-01 01:59:14');
+INSERT INTO `natsume`.`tb_shipping`(`user_id`, `receiver_name`, `receiver_phone`, `receiver_mobile`, `receiver_province`, `receiver_city`, `receiver_district`, `receiver_address`, `receiver_zip`, `create_time`, `update_time`) VALUES (20, '何腾蛟', '010', '18688888888', '陕西', '西安市', '碑林区', '西安交通大学', '710049', '2020-04-01 01:59:14', '2020-04-01 01:59:14');

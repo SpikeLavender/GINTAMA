@@ -1,6 +1,5 @@
 package com.totoro.controller;
 
-import com.lly835.bestpay.config.WxPayConfig;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayResponse;
 import com.totoro.config.WxAccountConfig;
@@ -49,6 +48,45 @@ public class PayController {
 		throw new RuntimeException("暂不支持的支付类型");
 
 	}
+
+    @GetMapping("/create")
+    public ModelAndView create1(@RequestParam("orderId") String orderId,
+                               @RequestParam("amount") BigDecimal amount,
+                               @RequestParam("payType") BestPayTypeEnum payTypeEnum) {
+        //PayResponse response = payService.create(orderId, amount, bestPayTypeEnum);
+        //支付方式不同，渲染就不同, WXPAY_NATIVE使用codeUrl,  ALIPAY_PC使用body
+        PayResponse response = payService.create(orderId, amount, payTypeEnum);
+
+        Map<String, String> map = new HashMap<>();
+        if (payTypeEnum == BestPayTypeEnum.WXPAY_NATIVE) {
+            map.put("returnUrl", wxAccountConfig.getReturnUrl());
+            map.put("orderId", orderId);
+            map.put("codeUrl", response.getCodeUrl());
+            return new ModelAndView("createForWxNative", map);
+        } else if (payTypeEnum == BestPayTypeEnum.ALIPAY_PC) {
+            map.put("body", response.getBody());
+            return new ModelAndView("createForAlipayPc", map);
+        }
+
+        throw new RuntimeException("暂不支持的支付类型");
+
+    }
+
+    @GetMapping("/wxqrcode")
+    @ResponseBody
+    public Map<String, String> qrcode(@RequestParam("orderId") String orderId,
+                                      @RequestParam("amount") BigDecimal amount) {
+        //PayResponse response = payService.create(orderId, amount, bestPayTypeEnum);
+        //支付方式不同，渲染就不同, WXPAY_NATIVE使用codeUrl,  ALIPAY_PC使用body
+        PayResponse response = payService.create(orderId, amount, BestPayTypeEnum.WXPAY_NATIVE);
+
+        Map<String, String> map = new HashMap<>();
+
+        map.put("returnUrl", wxAccountConfig.getReturnUrl());
+        map.put("orderId", orderId);
+        map.put("codeUrl", response.getCodeUrl());
+        return map;
+    }
 
 
 	@PostMapping("/notify")

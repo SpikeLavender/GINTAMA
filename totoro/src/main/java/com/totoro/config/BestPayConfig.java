@@ -26,6 +26,8 @@ public class BestPayConfig {
 		wxPayConfig.setMchKey(wxAccountConfig.getMchKey());
 		wxPayConfig.setNotifyUrl(wxAccountConfig.getNotifyUrl());
 		wxPayConfig.setReturnUrl(wxAccountConfig.getReturnUrl());
+		wxPayConfig.setMiniAppId(wxAccountConfig.getAppId());
+		wxPayConfig.setAppAppId(wxAccountConfig.getAppId());
 
 		AliPayConfig aliPayConfig = new AliPayConfig();
 		aliPayConfig.setAppId(aliPayAccountConfig.getAppId());

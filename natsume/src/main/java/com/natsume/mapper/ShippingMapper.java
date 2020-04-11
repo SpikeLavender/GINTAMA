@@ -24,9 +24,10 @@ public interface ShippingMapper {
 
     List<Shipping> selectByUid(Integer uId);
 
-	Shipping selectByUidAndShippingId(@Param("uId") Integer uId,
-	                                        @Param("shippingId") Integer shippingId);
+    Shipping selectByUidAndShippingId(@Param("uId") Integer uId,
+                                      @Param("shippingId") Integer shippingId);
 
-	List<Shipping> selectByIdSet(@Param("idSet") Set<Integer> idSet);
+    List<Shipping> selectByIdSet(@Param("idSet") Set<Integer> idSet);
 
+    int updateBatch(List<Shipping> record);
 }

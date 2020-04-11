@@ -17,4 +17,9 @@ public interface UserService {
 	 * 登录
 	 */
 	ResponseVo<User> login(String username, String password);
+
+    /**
+     * 登录
+     */
+    ResponseVo<User> wxLogin(String userCode);
 }

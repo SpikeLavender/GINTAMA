@@ -29,9 +29,13 @@ public enum ResponseEnum {
 
 	EMAIL_EXIST(501002, "邮箱已注册"),
 
-	USERNAME_OR_PASSWORD_ERROR(501003, "用户名或密码错误"),
+    USERNAME_OR_PASSWORD_ERROR(501003, "用户名或密码错误"),
 
-	NEED_LOGIN(501004, "用户未登录, 请先登录"),
+    NEED_LOGIN(501004, "用户未登录, 请先登录"),
+
+    PARENT_NO_EXIST(501005, "上级ID有误"),
+
+    WECHART_LOGIN_ERROR(501006, "微信查询ID失败"),
 
 	PRODUCT_OFF_SALE_OR_DELETE(502001, "商品已下架或删除"),
 

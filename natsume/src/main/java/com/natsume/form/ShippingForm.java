@@ -3,6 +3,7 @@ package com.natsume.form;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 public class ShippingForm {
@@ -30,5 +31,8 @@ public class ShippingForm {
 
 	@NotBlank
 	private String receiverZip;
+
+    @NotNull
+    private Boolean isDefault;
 
 }

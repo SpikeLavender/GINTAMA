@@ -16,4 +16,6 @@ public class CartVo {
 
 	private Integer cartTotalQuantity;
 
+    private Integer cartSelectedQuantity;
+
 }

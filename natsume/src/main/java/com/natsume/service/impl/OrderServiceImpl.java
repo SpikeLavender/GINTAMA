@@ -46,6 +46,64 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private OrderItemMapper orderItemMapper;
 
+    @Override
+    @Transactional
+    public ResponseVo<OrderVo> create(Integer uId, Integer productId, Integer productNum, Integer shippingId) {
+        //收货地址校验（总之要查出来）
+        Shipping shipping = shippingMapper.selectByUidAndShippingId(uId, shippingId);
+        if (shipping == null) {
+            return ResponseVo.error(SHIPPING_NOT_EXIST);
+        }
+
+        if (productNum == null || productNum < 1) {
+            return ResponseVo.error(SYSTEM_ERROR, "商品数量无效");
+        }
+        //根据productId查数据库
+        Product product = productMapper.selectByPrimaryKey(productId);
+        //是否有商品
+        if (product == null) {
+            return ResponseVo.error(PRODUCT_NOT_EXIST, "商品不存在. productId = " + productId);
+        }
+        //上下架状态校验
+        if (!ProductStatusEnum.ON_SALE.getCode().equals(product.getStatus())) {
+            return ResponseVo.error(PRODUCT_OFF_SALE_OR_DELETE, "商品不是在售状态. " + product.getName());
+        }
+        //库存是否充足
+        if (product.getStock() < productNum) {
+            return ResponseVo.error(PRODUCT_STOCK_ERROR, "商品库存不足. " + product.getName());
+        }
+
+        List<OrderItem> orderItems = new ArrayList<>();
+        String orderNo = generateOrderNo();
+
+        OrderItem orderItem = buildOrderItem(uId, orderNo, productNum, product);
+        orderItems.add(orderItem);
+
+        //减库存
+        product.setStock(product.getStock() - productNum);
+        int row = productMapper.updateByPrimaryKeySelective(product);
+        if (row <= 0) {
+            return ResponseVo.error(SYSTEM_ERROR);
+        }
+
+        //计算总价，只计算被选中的商品
+        //生成订单，入库：order 和 order_item，事务控制
+        Order order = buildOrder(uId, orderNo, shippingId, orderItems);
+        int rowForOrder = orderMapper.insertSelective(order);
+        if (rowForOrder <= 0 ) {
+            return ResponseVo.error(SYSTEM_ERROR);
+        }
+
+        int rowForOrderItem = orderItemMapper.batchInsert(orderItems);
+        if (rowForOrderItem <= 0 ) {
+            return ResponseVo.error(SYSTEM_ERROR);
+        }
+
+        //构造orderVo对象
+        OrderVo orderVo = buildOrderVo(order, orderItems, shipping);
+        return ResponseVo.success(orderVo);
+    }
+
 	@Override
 	@Transactional
 	public ResponseVo<OrderVo> create(Integer uId, Integer shippingId) {
@@ -103,6 +161,7 @@ public class OrderServiceImpl implements OrderService {
 		//生成订单，入库：order 和 order_item，事务控制
 		Order order = buildOrder(uId, orderNo, shippingId, orderItems);
 		int rowForOrder = orderMapper.insertSelective(order);
+
 		if (rowForOrder <= 0 ) {
 			return ResponseVo.error(SYSTEM_ERROR);
 		}
@@ -210,7 +269,7 @@ public class OrderServiceImpl implements OrderService {
 		}
 	}
 
-	private OrderVo buildOrderVo(Order order, List<OrderItem> orderItems, Shipping shipping) {
+    private OrderVo buildOrderVo(Order order, List<OrderItem> orderItems, Shipping shipping) {
 		OrderVo orderVo = new OrderVo();
 		BeanUtils.copyProperties(order, orderVo);
 

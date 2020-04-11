@@ -11,4 +11,6 @@ public class CartAddForm {
 	private Integer productId;
 
 	private Boolean selected = true;
+
+    private Integer quantity = 1;
 }

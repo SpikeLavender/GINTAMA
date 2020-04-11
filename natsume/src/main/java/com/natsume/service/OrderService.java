@@ -6,6 +6,8 @@ import com.natsume.vo.ResponseVo;
 
 public interface OrderService {
 
+    ResponseVo<OrderVo> create(Integer id, Integer productId, Integer productNum, Integer shippingId);
+
 	ResponseVo<OrderVo> create(Integer uId, Integer shippingId);
 
 	ResponseVo<PageInfo> list(Integer uId, Integer pageNum, Integer pageSize);
@@ -15,4 +17,5 @@ public interface OrderService {
 	ResponseVo cancel(Integer uId, String orderNo);
 
 	void paid(String orderNo);
+
 }

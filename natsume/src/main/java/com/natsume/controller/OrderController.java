@@ -26,6 +26,14 @@ public class OrderController {
 		return orderService.create(user.getId(), form.getShippingId());
 	}
 
+    @PostMapping("/orders/{productId}")
+    public ResponseVo<OrderVo> create(@PathVariable Integer productId,
+                                      @Valid @RequestBody OrderCreateForm form,
+                                      HttpSession session) {
+        User user = (User) session.getAttribute(CURRENT_USER);
+        return orderService.create(user.getId(), productId, form.getProductNum(), form.getShippingId());
+    }
+
 	@GetMapping("/orders")
 	public ResponseVo<PageInfo> list(@RequestParam(required = false, defaultValue = "1") Integer pageNum,
 	                                 @RequestParam(required = false, defaultValue = "10") Integer pageSize,

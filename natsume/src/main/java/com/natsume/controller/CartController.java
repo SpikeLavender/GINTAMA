@@ -33,6 +33,13 @@ public class CartController {
 		return cartService.add(user.getId(), form);
 	}
 
+    @GetMapping("/carts/{productId}")
+    public ResponseVo<Boolean> get(@PathVariable Integer productId,
+                                     HttpSession session) {
+        User user = (User) session.getAttribute(CURRENT_USER);
+        return cartService.exist(user.getId(), productId);
+    }
+
 	@PutMapping("/carts/{productId}")
 	public ResponseVo<CartVo> update(@PathVariable Integer productId,
 	                                 @Valid @RequestBody CartUpdateForm form,

@@ -3,7 +3,7 @@ spring:
   datasource:
     url: jdbc:mysql://49.232.146.162:3306/natsume?characterEncoding=utf-8&serverTimezone=UTC&useSSL=false
     username: root
-    password: 123456
+    password: U2FsdGVkX18kY9pA6bwGYP/4xavO576XOCjgKjQbL48=
     driver-class-name: com.mysql.jdbc.Driver
   flyway:
     enabled: false
@@ -12,7 +12,7 @@ spring:
     port: 6379
     password: password
   rabbitmq:
-    addresses: 127.0.1
+    addresses: 123.207.218.247
     port: 5672
     username: guest
     password: guest
@@ -29,6 +29,10 @@ mybatis:
   #配置mybatis映射配置文件中实体类别名
   type-aliases-package: com.natsume.entity
 
+wx:
+  appId: wx18cb444312117ba8
+  mchKey: d743bf233156d3c019c7d5f732f860ff
+  openIdUrl: https://api.weixin.qq.com/sns/jscode2session
 
 # pagehelper 配置
 pagehelper:

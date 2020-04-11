@@ -10,4 +10,6 @@ public class OrderCreateForm {
 	@NotNull
 	private Integer shippingId;
 
+	private Integer productNum;
+
 }
