@@ -293,7 +293,7 @@
 		profit = values(profit),
 		achievement = values(achievement),
 		self_achievement = values(self_achievement),
-		sub_achievement = values(sub_achievement),
+		sub_achievement = values(sub_achievement)
 	</update>
 	<insert id="replaceBatch" parameterType="list">
 		replace into tb_achievement (id, user_id, parent_id,
