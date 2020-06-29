@@ -183,9 +183,11 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
+    @SuppressWarnings("unchecked")
 	public ResponseVo<PageInfo> list(Integer uId, Integer pageNum, Integer pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		List<Order> orders = orderMapper.selectByUid(uId);
+        PageInfo pageInfo = new PageInfo<>(orders);
 
 		Set<String> orderNoSet = orders.stream().map(Order::getOrderNo).collect(Collectors.toSet());
 		List<OrderItem> orderItems = orderItemMapper.selectByOrderNoSet(orderNoSet);
@@ -205,7 +207,7 @@ public class OrderServiceImpl implements OrderService {
 			orderVos.add(orderVo);
 		}
 
-		PageInfo<OrderVo> pageInfo = new PageInfo<>(orderVos);
+		pageInfo.setList(orderVos);
 
 		return ResponseVo.success(pageInfo);
 	}

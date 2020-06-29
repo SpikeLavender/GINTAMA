@@ -4,10 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.lly835.bestpay.enums.BestPayPlatformEnum;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.enums.OrderStatusEnum;
+import com.lly835.bestpay.model.OrderQueryRequest;
+import com.lly835.bestpay.model.OrderQueryResponse;
 import com.lly835.bestpay.model.PayRequest;
 import com.lly835.bestpay.model.PayResponse;
 import com.lly835.bestpay.service.BestPayService;
 import com.totoro.entity.PayInfo;
+import com.totoro.vo.ResponseVo;
 import com.totoro.enums.PayPlatformEnum;
 import com.totoro.mapper.PayInfoMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -33,26 +36,41 @@ public class PayServiceImpl implements com.totoro.service.PayService {
 	private AmqpTemplate amqpTemplate;
 
 	@Override
-	public PayResponse create(String orderId, BigDecimal amount, BestPayTypeEnum payTypeEnum) {
-		//1. 写入数据库
-		PayInfo payInfo = new PayInfo(orderId,
-				PayPlatformEnum.getByBestPayTypeEnum(payTypeEnum).getCode(),
-				OrderStatusEnum.NOTPAY.name(),
-				amount);
+	public ResponseVo<PayResponse> create(Integer userId, String orderId, String openId, BigDecimal amount, BestPayTypeEnum payTypeEnum) {
+		//已存在, 查询
+        PayInfo payInfo = payInfoMapper.selectByByOrderNo(orderId);
+        if (payInfo == null) {
 
-		payInfoMapper.insertSelective(payInfo);
+            //1. 写入数据库
+            payInfo = new PayInfo(orderId,
+                    PayPlatformEnum.getByBestPayTypeEnum(payTypeEnum).getCode(),
+                    OrderStatusEnum.NOTPAY.name(),
+                    amount);
+            payInfo.setUserId(userId);
 
-		if (payTypeEnum != BestPayTypeEnum.WXPAY_NATIVE && payTypeEnum != BestPayTypeEnum.ALIPAY_PC) {
+            payInfoMapper.insertSelective(payInfo);
+        }
+
+		if (payTypeEnum != BestPayTypeEnum.WXPAY_NATIVE
+                && payTypeEnum != BestPayTypeEnum.WXPAY_MINI
+                && payTypeEnum != BestPayTypeEnum.ALIPAY_PC) {
 			throw new RuntimeException("暂不支持的支付类型");
 		}
+
 		PayRequest request = new PayRequest();
 		request.setOrderName("2361478-最好的支付SDK");
 		request.setOrderId(orderId);
 		request.setOrderAmount(amount.doubleValue());
 		request.setPayTypeEnum(payTypeEnum);
+		request.setOpenid(openId);
 		PayResponse response = bestPayService.pay(request);
-		log.info("response: " + response);
-		return response;
+
+		response.setOrderId(orderId);
+        response.setOrderAmount(amount.doubleValue());
+        response.setPayPlatformEnum(payTypeEnum.getPlatform());
+        //存储信息
+        log.info("response: " + response);
+        return ResponseVo.success(response);
 	}
 
 	@Override
@@ -104,4 +122,24 @@ public class PayServiceImpl implements com.totoro.service.PayService {
 	public PayInfo queryByOrderId(String orderId) {
 		return payInfoMapper.selectByByOrderNo(orderId);
 	}
+
+	//查询订单接口
+    private String query( String orderId, BestPayTypeEnum payTypeEnum) {
+        PayInfo payInfo = payInfoMapper.selectByByOrderNo(orderId);
+        if (payInfo != null) {
+            OrderQueryRequest queryRequest = new OrderQueryRequest();
+            queryRequest.setOrderId(orderId);
+            queryRequest.setPlatformEnum(payTypeEnum.getPlatform());
+            //更新状态
+            OrderQueryResponse queryResponse = bestPayService.query(queryRequest);
+            payInfo.setPlatformStatus(queryResponse.getOrderStatusEnum().name());
+            //payInfoMapper.updateByPrimaryKeySelective(payInfo);
+            if (queryResponse.getOrderStatusEnum().equals(OrderStatusEnum.CLOSED)
+                    || queryResponse.getOrderStatusEnum().equals(OrderStatusEnum.SUCCESS)) {
+
+            }
+
+        }
+        return "";
+    }
 }

@@ -1,12 +1,10 @@
 package com.natsume.controller;
 
+import com.natsume.form.SearchForm;
 import com.natsume.service.ProductService;
 import com.natsume.vo.ResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ProductController {
@@ -25,4 +23,12 @@ public class ProductController {
 	public ResponseVo detail(@PathVariable Integer productId) {
 		return productService.detail(productId);
 	}
+
+	@PostMapping("/products/search")
+    public ResponseVo search(@RequestBody SearchForm searchForm,
+                             @RequestParam(required = false, defaultValue = "1") Integer pageNum,
+                             @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+	    return productService.search(searchForm, pageNum, pageSize);
+    }
+
 }

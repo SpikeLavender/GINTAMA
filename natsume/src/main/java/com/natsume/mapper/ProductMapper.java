@@ -1,6 +1,7 @@
 package com.natsume.mapper;
 
 import com.natsume.entity.Product;
+import com.natsume.form.SearchForm;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -22,5 +23,7 @@ public interface ProductMapper {
 	List<Product> selectByCategoryIdSet(@Param("categoryIdSet") Set<Integer> categoryIdSet);
 
 	List<Product> selectByProductIdSet(@Param("productIdSet") Set<Integer> productIdSet);
+
+    List<Product> selectSelective(@Param("categoryIdSet") Set<Integer> categoryIdSet, @Param("searchForm") SearchForm searchForm);
 
 }

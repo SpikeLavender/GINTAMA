@@ -10,4 +10,6 @@ public class WeChartForm {
     @NotBlank
     private String userCode;
 
+    private Integer parentId;
+
 }

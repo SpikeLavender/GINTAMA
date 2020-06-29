@@ -2,7 +2,6 @@ package com.natsume.service;
 
 import com.github.pagehelper.PageInfo;
 import com.natsume.vo.AchievementVo;
-import com.natsume.vo.ProfitDetailVo;
 import com.natsume.vo.ProfitVo;
 import com.natsume.vo.ResponseVo;
 
@@ -19,7 +18,4 @@ public interface AchievementService {
 
     ResponseVo<PageInfo> detail(Integer uId, Integer pageNum, Integer pageSize);
 
-    void weekAchievement();
-
-    void curWeekAchievement();
 }

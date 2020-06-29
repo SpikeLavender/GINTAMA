@@ -19,9 +19,9 @@ mybatis:
   type-aliases-package: com.totoro.entity
 
 wx:
-  appId: wxd898fcb01713c658
-  mchId: 1483469312
-  mchKey: 098F6BCD4621D373CADE4E832627B4F6
+  appId: wx4979619f65fe08f5
+  mchId: 1590264131
+  mchKey: wx6H4W6Q6uEPBmlMPzwxfckS5WNy38XH
   notifyUrl: http://123.207.218.247/pay/notify
   returnUrl: https://www.natsumes.com/#/order/list
 

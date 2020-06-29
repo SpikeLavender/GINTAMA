@@ -49,7 +49,7 @@ public class UserController {
     @PostMapping("/user/wechart")
     public ResponseVo<User> wechart(@Valid @RequestBody WeChartForm userForm, HttpSession session) {
 
-        ResponseVo<User> userResponseVo = userService.wxLogin(userForm.getUserCode());
+        ResponseVo<User> userResponseVo = userService.wxLogin(userForm);
 
         //设置 Session
         session.setAttribute(CURRENT_USER, userResponseVo.getData());
@@ -71,4 +71,11 @@ public class UserController {
 		session.removeAttribute(CURRENT_USER);
 		return ResponseVo.success();
 	}
+
+	@PostMapping("/user/{parentId}")
+    public ResponseVo blind(@PathVariable Integer parentId,
+                            HttpSession session) {
+        User user = (User) session.getAttribute(CURRENT_USER);
+        return userService.blind(user.getId(), parentId);
+    }
 }

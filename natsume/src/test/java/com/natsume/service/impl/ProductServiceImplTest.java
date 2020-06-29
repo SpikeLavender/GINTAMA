@@ -3,6 +3,7 @@ package com.natsume.service.impl;
 import com.github.pagehelper.PageInfo;
 import com.natsume.ApplicationTests;
 import com.natsume.enums.ResponseEnum;
+import com.natsume.form.SearchForm;
 import com.natsume.service.ProductService;
 import com.natsume.utils.JSONUtils;
 import com.natsume.vo.ProductDetailVo;
@@ -12,6 +13,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
 
 
 @Slf4j
@@ -35,4 +38,12 @@ public class ProductServiceImplTest extends ApplicationTests {
 		log.info("responseVo={}", JSONUtils.printFormat(detail));
 		Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), detail.getStatus());
 	}
+
+	@Test
+    public void search() {
+        SearchForm searchForm = new SearchForm("华为", new BigDecimal(100), new BigDecimal(1000), null);
+        ResponseVo<PageInfo> detail = productService.search(searchForm, 1, 2);
+        log.info("responseVo={}", JSONUtils.printFormat(detail));
+        Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), detail.getStatus());
+    }
 }

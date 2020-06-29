@@ -30,8 +30,8 @@ mybatis:
   type-aliases-package: com.natsume.entity
 
 wx:
-  appId: wx18cb444312117ba8
-  mchKey: d743bf233156d3c019c7d5f732f860ff
+  appId: wx4979619f65fe08f5
+  mchKey: 99a984c7045f09c7ac0d49a92598b5eb
   openIdUrl: https://api.weixin.qq.com/sns/jscode2session
 
 # pagehelper 配置
@@ -40,16 +40,10 @@ pagehelper:
   reasonable: true
   support-methods-arguments: true
   params: countSql
-
-# 定时任务配置
-scheduled:
-  week:
-    fixedRate: 600000 # ms, 10 min
-    interval: 10
-    cron: "0 */30 * * * ?"  # 30 min
+  rowBoundsWithCount: true
 
 server:
   servlet:
     session:
-      timeout: 1800 # s
+      timeout: 120000 # s
 

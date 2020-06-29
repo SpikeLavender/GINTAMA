@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.natsume.entity.Product;
 import com.natsume.enums.ResponseEnum;
+import com.natsume.form.SearchForm;
 import com.natsume.mapper.ProductMapper;
 import com.natsume.service.CategoryService;
 import com.natsume.service.ProductService;
@@ -46,17 +47,8 @@ public class ProductServiceImpl implements ProductService {
 
 		PageHelper.startPage(pageNum, pageSize);
 		List<Product> products = productMapper.selectByCategoryIdSet(categoryIdSet);
-		List<ProductVo> productVos = products.stream()
-				.map(e -> {
-					ProductVo productVo = new ProductVo();
-					BeanUtils.copyProperties(e, productVo);
-					return productVo;
-				})
-				.collect(Collectors.toList());
-
-		PageInfo pageInfo = new PageInfo<>(productVos);
-		return ResponseVo.success(pageInfo);
-	}
+        return getPageInfoResponseVo(products);
+    }
 
 	@Override
 	public ResponseVo<ProductDetailVo> detail(Integer productId) {
@@ -78,4 +70,34 @@ public class ProductServiceImpl implements ProductService {
 
 		return ResponseVo.success(productDetailVo);
 	}
+
+    @Override
+    public ResponseVo<PageInfo> search(SearchForm searchForm, Integer pageNum, Integer pageSize) {
+	    //根据不同条件去查询
+        Set<Integer> categoryIdSet = new HashSet<>();
+
+        if (searchForm.getCategoryId() != null) {
+            categoryService.findSubCategoryId(searchForm.getCategoryId(), categoryIdSet);
+            categoryIdSet.add(searchForm.getCategoryId());
+        }
+
+        PageHelper.startPage(pageNum, pageSize);
+        List<Product> products = productMapper.selectSelective(categoryIdSet, searchForm);
+        return getPageInfoResponseVo(products);
+    }
+
+    @SuppressWarnings("unchecked")
+    private ResponseVo<PageInfo> getPageInfoResponseVo(List<Product> products) {
+        PageInfo pageInfo = new PageInfo<>(products);
+        List<ProductVo> productVos = products.stream()
+                .map(e -> {
+                    ProductVo productVo = new ProductVo();
+                    BeanUtils.copyProperties(e, productVo);
+                    return productVo;
+                })
+                .collect(Collectors.toList());
+        pageInfo.setList(productVos);
+        return ResponseVo.success(pageInfo);
+    }
+
 }

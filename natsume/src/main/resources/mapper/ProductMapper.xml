@@ -193,14 +193,40 @@
 		<include refid="Base_Column_List" />
 		from tb_product
 		<where>
+			status = 1
 			<if test="productIdSet.size() > 0">
-				id in
+				and id in
 				<foreach collection="productIdSet" item="item" index="index" open="(" separator="," close=")">
 					#{item}
 				</foreach>
 			</if>
 		</where>
 
+	</select>
+
+	<select id="selectSelective" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_product
+		<where>
+			and status = 1
+			<if test="categoryIdSet.size() > 0">
+				and category_id in
+				<foreach collection="categoryIdSet" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="searchForm != null and searchForm.minPrice != null and searchForm.minPrice != '' and searchForm.minPrice > 0">
+				and price <![CDATA[>=]]> #{searchForm.minPrice}
+			</if>
+			<if test="searchForm != null and searchForm.maxPrice != null and searchForm.maxPrice != '' and searchForm.maxPrice > 0">
+				and price <![CDATA[<=]]> #{searchForm.maxPrice}
+			</if>
+			<if test="searchForm != null and searchForm.name != null and searchForm.name.trim().length() > 0">
+				and name like "%"#{searchForm.name}"%"
+				or subtitle like "%"#{searchForm.name}"%"
+			</if>
+		</where>
 	</select>
 
 </mapper>

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.natsume.config.WxConfig;
 import com.natsume.entity.User;
 import com.natsume.enums.RoleEnum;
+import com.natsume.form.WeChartForm;
 import com.natsume.mapper.UserMapper;
 import com.natsume.service.UserService;
 import com.natsume.utils.JSONUtils;
@@ -16,7 +17,7 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
-
+import java.util.List;
 import static com.natsume.enums.ResponseEnum.*;
 
 @Service
@@ -84,12 +85,12 @@ public class UserServiceImpl implements UserService {
 	}
 
     @Override
-    public ResponseVo<User> wxLogin(String userCode) {
+    public ResponseVo<User> wxLogin(WeChartForm weChartForm) {
 
 
         String url = wxConfig.getOpenIdUrl() + "?appid=" + wxConfig.getAppId()
                 + "&secret=" + wxConfig.getMchKey()+ "&js_code="
-                + userCode + "&grant_type=authorization_code";
+                + weChartForm.getUserCode() + "&grant_type=authorization_code";
 
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
 
@@ -126,5 +127,55 @@ public class UserServiceImpl implements UserService {
             userMapper.updateByPrimaryKey(user);
         }
         return ResponseVo.success(user);
+    }
+
+    @Override
+    public ResponseVo blind(Integer uid, Integer parentId) {
+	    if (parentId == 0) {
+	        return ResponseVo.success();
+        }
+
+	    //判断此用户是否绑定不为0的父Id
+        User user = userMapper.selectByPrimaryKey(uid);
+        //已绑定，直接返回已绑定
+        if (user.getParentId() != 0) {
+            return ResponseVo.error(PARENT_HAS_EXIST);
+        }
+
+        //未绑定
+        // 去查parentId是不是不为0且不存在数据库中
+        if (userMapper.countById(parentId) <= 0) {
+            // 是，返回，此父Id错误
+            return ResponseVo.error(PARENT_NO_EXIST);
+        }
+        // 去查parentId是不是不为此用户的子Id
+        List<User> users = userMapper.selectAll();
+        if (isSubId(users, uid, parentId)) {
+            // 是，返回，此ID是你的下级，不能绑定
+            return ResponseVo.error(PARENT_IS_NOT_VALID);
+        }
+
+        //否，绑定，0 -> 绑定0
+        user.setParentId(parentId);
+        int i = userMapper.updateByPrimaryKeySelective(user);
+        if (i <= 0) {
+            return ResponseVo.error(SYSTEM_ERROR);
+        }
+        //返回成功
+        return ResponseVo.success();
+    }
+
+    private boolean isSubId(List<User> users, Integer uId, Integer parentId) {
+        for (User user : users) {
+            if (!user.getId().equals(parentId)) {
+                continue;
+            }
+            if (user.getParentId().equals(uId)) {
+                return true;
+            } else {
+                return isSubId(users, uId, user.getParentId());
+            }
+        }
+        return false;
     }
 }

@@ -37,6 +37,10 @@ public enum ResponseEnum {
 
     WECHART_LOGIN_ERROR(501006, "微信查询ID失败"),
 
+    PARENT_HAS_EXIST(501007, "上级ID已存在"),
+
+    PARENT_IS_NOT_VALID(501008, "此ID为你的下级"),
+
 	PRODUCT_OFF_SALE_OR_DELETE(502001, "商品已下架或删除"),
 
 	PRODUCT_NOT_EXIST(502002, "商品不存在"),

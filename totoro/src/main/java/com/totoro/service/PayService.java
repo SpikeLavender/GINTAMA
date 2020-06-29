@@ -3,6 +3,7 @@ package com.totoro.service;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayResponse;
 import com.totoro.entity.PayInfo;
+import com.totoro.vo.ResponseVo;
 
 import java.math.BigDecimal;
 
@@ -12,7 +13,7 @@ public interface PayService {
 	 * @param orderId
 	 * @param amount
 	 */
-	PayResponse create(String orderId, BigDecimal amount, BestPayTypeEnum payTypeEnum);
+	ResponseVo<PayResponse> create(Integer userId, String orderId, String openId, BigDecimal amount, BestPayTypeEnum payTypeEnum);
 
 
 	/**

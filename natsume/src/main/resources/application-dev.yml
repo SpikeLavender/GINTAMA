@@ -36,14 +36,6 @@ pagehelper:
   support-methods-arguments: true
   params: countSql
 
-# 定时任务配置
-scheduled:
-  week:
-    fixedRate: 600000 #ms, 10 min
-    interval: 10
-    cron: "0 */30 * * * ?"
-
-
 wx:
   appId: wx18cb444312117ba8
   mchKey: d743bf233156d3c019c7d5f732f860ff

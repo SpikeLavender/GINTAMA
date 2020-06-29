@@ -41,4 +41,11 @@ public class UserServiceImplTest extends ApplicationTests {
 		log.info("responseVo={}", JSONUtils.printFormat(responseVo));
 		Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
 	}
+
+	@Test
+    public void blind() {
+        ResponseVo responseVo = userService.blind(12, 14);
+        log.info("responseVo={}", JSONUtils.printFormat(responseVo));
+        //Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
+    }
 }

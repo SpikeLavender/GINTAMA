@@ -1,16 +1,13 @@
-package com.natsume.schedule;
+package com.wezard.schedule;
 
-import com.natsume.ApplicationTests;
-import com.natsume.entity.Achievement;
-import com.natsume.service.impl.AchievementServiceImpl;
+import com.wezard.WezardApplicationTests;
+import com.wezard.service.impl.AchievementServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-
 @Slf4j
-public class AchievementScheduledTest extends ApplicationTests {
+public class AchievementScheduledTest extends WezardApplicationTests {
 
     @Autowired
     AchievementServiceImpl achievementService;

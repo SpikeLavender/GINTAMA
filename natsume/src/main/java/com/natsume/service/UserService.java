@@ -1,6 +1,8 @@
 package com.natsume.service;
 
 import com.natsume.entity.User;
+import com.natsume.form.UserLoginForm;
+import com.natsume.form.WeChartForm;
 import com.natsume.vo.ResponseVo;
 
 public interface UserService {
@@ -21,5 +23,7 @@ public interface UserService {
     /**
      * 登录
      */
-    ResponseVo<User> wxLogin(String userCode);
+    ResponseVo<User> wxLogin(WeChartForm weChartForm);
+
+    ResponseVo blind(Integer uid, Integer parentId);
 }
