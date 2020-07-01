@@ -16,7 +16,7 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.totoro.entity
+  type-aliases-package: com.natsumes.entity
 
 wx:
   appId: wx4979619f65fe08f5

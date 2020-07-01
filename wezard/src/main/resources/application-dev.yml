@@ -18,7 +18,7 @@ mybatis:
   #配置mybatis的xml映射配置文件路径
   mapper-locations: classpath:mapper/*.xml
   #配置mybatis映射配置文件中实体类别名
-  type-aliases-package: com.wezard.entity
+  type-aliases-package: com.nastumes.entity
 
 # pagehelper 配置
 pagehelper:

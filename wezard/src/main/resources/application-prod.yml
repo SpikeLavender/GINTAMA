@@ -8,17 +8,17 @@ spring:
   flyway:
     enabled: false
 
-# mybatis配置
+## mybatis配置
 mybatis:
   configuration:
     #开启驼峰命名匹配映射
     map-underscore-to-camel-case: true
     # 控制台日志配置
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   #配置mybatis的xml映射配置文件路径
   mapper-locations: classpath:mapper/*.xml
   #配置mybatis映射配置文件中实体类别名
-  type-aliases-package: com.wezard.entity
+  type-aliases-package: com.nastumes.entity
 
 # 定时任务配置
 scheduled:
@@ -35,4 +35,5 @@ server:
   servlet:
     session:
       timeout: 120000 # s
+
 
