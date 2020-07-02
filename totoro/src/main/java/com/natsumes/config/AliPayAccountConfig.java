@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "alipay")
 @Data
 public class AliPayAccountConfig {
-	private String appId;
+    private String appId;
 
-	private String privateKey;
+    private String privateKey;
 
-	private String publicKey;
+    private String publicKey;
 
-	private String notifyUrl;
+    private String notifyUrl;
 
-	private String returnUrl;
+    private String returnUrl;
 }

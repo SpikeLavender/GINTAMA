@@ -7,19 +7,19 @@ import java.math.BigDecimal;
 
 @Data
 public class ProductVo implements Serializable {
-	private Integer id;
+    private Integer id;
 
-	private Integer categoryId;
+    private Integer categoryId;
 
-	private String name;
+    private String name;
 
-	private String subtitle;
+    private String subtitle;
 
-	private String mainImage;
+    private String mainImage;
 
-	private String subImages;
+    private String subImages;
 
-	private Integer status;
+    private Integer status;
 
-	private BigDecimal price;
+    private BigDecimal price;
 }

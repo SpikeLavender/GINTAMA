@@ -12,22 +12,21 @@ import lombok.Getter;
  * xx3xxx: 购物车模块
  * xx4xxx: 收货地址模块
  * xx5xxx: 订单模块
- *
  */
 @Getter
 public enum ResponseEnum {
-	/**
-	 * 成功状态码
-	 */
-	SUCCESS(0, "成功"),
-	/**
-	 * 参数为空
-	 */
-	PARAM_ERROR(400000, "参数错误"),
+    /**
+     * 成功状态码
+     */
+    SUCCESS(0, "成功"),
+    /**
+     * 参数为空
+     */
+    PARAM_ERROR(400000, "参数错误"),
 
-	USERNAME_EXIST(501001, "用户名已注册"),
+    USERNAME_EXIST(501001, "用户名已注册"),
 
-	EMAIL_EXIST(501002, "邮箱已注册"),
+    EMAIL_EXIST(501002, "邮箱已注册"),
 
     USERNAME_OR_PASSWORD_ERROR(501003, "用户名或密码错误"),
 
@@ -41,45 +40,45 @@ public enum ResponseEnum {
 
     PARENT_IS_NOT_VALID(501008, "此ID为你的下级"),
 
-	PRODUCT_OFF_SALE_OR_DELETE(502001, "商品已下架或删除"),
+    PRODUCT_OFF_SALE_OR_DELETE(502001, "商品已下架或删除"),
 
-	PRODUCT_NOT_EXIST(502002, "商品不存在"),
+    PRODUCT_NOT_EXIST(502002, "商品不存在"),
 
-	PRODUCT_STOCK_ERROR(502003, "库存不正确"),
+    PRODUCT_STOCK_ERROR(502003, "库存不正确"),
 
-	CART_PRODUCT_NOT_EXIST(503001, "购物车无此商品"),
+    CART_PRODUCT_NOT_EXIST(503001, "购物车无此商品"),
 
-	DELETE_SHIPPING_FAIL(504001, "删除收货地址失败"),
+    DELETE_SHIPPING_FAIL(504001, "删除收货地址失败"),
 
-	SHIPPING_NOT_EXIST(504002, "收货地址不存在"),
+    SHIPPING_NOT_EXIST(504002, "收货地址不存在"),
 
-	CART_SELECTED_IS_EMPTY(505001, "请选择商品后下单"),
+    CART_SELECTED_IS_EMPTY(505001, "请选择商品后下单"),
 
-	ORDER_NOT_EXIST(505002, "订单不存在"),
+    ORDER_NOT_EXIST(505002, "订单不存在"),
 
-	ORDER_STATUS_ERROR(505003, "订单状态有误"),
+    ORDER_STATUS_ERROR(505003, "订单状态有误"),
 
-	SYSTEM_ERROR(100000, "服务端错误"),
+    SYSTEM_ERROR(100000, "服务端错误"),
 
-	;
+    ;
 
-	/**
-	 * 状态码
-	 */
-	private Integer code;
-	/**
-	 * 异常信息
-	 */
-	private String desc;
+    /**
+     * 状态码
+     */
+    private Integer code;
+    /**
+     * 异常信息
+     */
+    private String desc;
 
-	/**
-	 * 异常枚举信息
-	 *
-	 * @param code 状态码
-	 * @param desc  信息
-	 */
-	ResponseEnum(Integer code, String desc) {
-		this.code = code;
-		this.desc = desc;
-	}
+    /**
+     * 异常枚举信息
+     *
+     * @param code 状态码
+     * @param desc 信息
+     */
+    ResponseEnum(Integer code, String desc) {
+        this.code = code;
+        this.desc = desc;
+    }
 }

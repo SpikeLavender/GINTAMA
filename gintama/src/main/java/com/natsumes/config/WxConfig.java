@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "wx")
 @Data
 public class WxConfig {
-	private String appId;
+    private String appId;
 
-	private String mchKey;
+    private String mchKey;
 
-	private String openIdUrl;
+    private String openIdUrl;
 }

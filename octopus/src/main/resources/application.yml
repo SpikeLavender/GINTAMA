@@ -1,0 +1,8 @@
+wx:
+  appId: wx4979619f65fe08f5
+  mchKey: 99a984c7045f09c7ac0d49a92598b5eb
+  accessTokenUrl: https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET
+  schedule:
+      fixedRate: 3600000 # ms, 1h
+      interval: 10
+      cron: "0 */30 * * * ?"  # 30 min

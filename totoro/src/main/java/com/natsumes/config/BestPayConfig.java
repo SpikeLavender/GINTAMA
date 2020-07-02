@@ -11,35 +11,35 @@ import org.springframework.stereotype.Component;
 @Component
 public class BestPayConfig {
 
-	@Autowired
-	private AliPayAccountConfig aliPayAccountConfig;
+    @Autowired
+    private AliPayAccountConfig aliPayAccountConfig;
 
-	@Autowired
-	private WxAccountConfig wxAccountConfig;
+    @Autowired
+    private WxAccountConfig wxAccountConfig;
 
-	@Bean
-	public BestPayService bestPayService() {
+    @Bean
+    public BestPayService bestPayService() {
 
-		WxPayConfig wxPayConfig = new WxPayConfig();
-		wxPayConfig.setAppId(wxAccountConfig.getAppId());
-		wxPayConfig.setMchId(wxAccountConfig.getMchId());
-		wxPayConfig.setMchKey(wxAccountConfig.getMchKey());
-		wxPayConfig.setNotifyUrl(wxAccountConfig.getNotifyUrl());
-		wxPayConfig.setReturnUrl(wxAccountConfig.getReturnUrl());
-		wxPayConfig.setMiniAppId(wxAccountConfig.getAppId());
-		wxPayConfig.setAppAppId(wxAccountConfig.getAppId());
+        WxPayConfig wxPayConfig = new WxPayConfig();
+        wxPayConfig.setAppId(wxAccountConfig.getAppId());
+        wxPayConfig.setMchId(wxAccountConfig.getMchId());
+        wxPayConfig.setMchKey(wxAccountConfig.getMchKey());
+        wxPayConfig.setNotifyUrl(wxAccountConfig.getNotifyUrl());
+        wxPayConfig.setReturnUrl(wxAccountConfig.getReturnUrl());
+        wxPayConfig.setMiniAppId(wxAccountConfig.getAppId());
+        wxPayConfig.setAppAppId(wxAccountConfig.getAppId());
 
-		AliPayConfig aliPayConfig = new AliPayConfig();
-		aliPayConfig.setAppId(aliPayAccountConfig.getAppId());
-		aliPayConfig.setPrivateKey(aliPayAccountConfig.getPrivateKey());
-		aliPayConfig.setAliPayPublicKey(aliPayAccountConfig.getPublicKey());
-		aliPayConfig.setNotifyUrl(aliPayAccountConfig.getNotifyUrl());
-		aliPayConfig.setReturnUrl(aliPayAccountConfig.getReturnUrl());
+        AliPayConfig aliPayConfig = new AliPayConfig();
+        aliPayConfig.setAppId(aliPayAccountConfig.getAppId());
+        aliPayConfig.setPrivateKey(aliPayAccountConfig.getPrivateKey());
+        aliPayConfig.setAliPayPublicKey(aliPayAccountConfig.getPublicKey());
+        aliPayConfig.setNotifyUrl(aliPayAccountConfig.getNotifyUrl());
+        aliPayConfig.setReturnUrl(aliPayAccountConfig.getReturnUrl());
 
-		BestPayServiceImpl bestPayService = new BestPayServiceImpl();
-		bestPayService.setWxPayConfig(wxPayConfig);
-		bestPayService.setAliPayConfig(aliPayConfig);
+        BestPayServiceImpl bestPayService = new BestPayServiceImpl();
+        bestPayService.setWxPayConfig(wxPayConfig);
+        bestPayService.setAliPayConfig(aliPayConfig);
 
-		return bestPayService;
-	}
+        return bestPayService;
+    }
 }

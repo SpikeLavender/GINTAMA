@@ -19,9 +19,9 @@ public interface OrderMapper {
 
     int updateByPrimaryKey(Order record);
 
-	List<Order> selectByUid(Integer id);
+    List<Order> selectByUid(Integer id);
 
-	Order selectByOrderNo(String orderNo);
+    Order selectByOrderNo(String orderNo);
 
     List<Order> selectByUidSet(@Param("uIdSet") Set<Integer> uIdSet);
 }

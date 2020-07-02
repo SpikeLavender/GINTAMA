@@ -10,10 +10,10 @@ import com.lly835.bestpay.model.PayRequest;
 import com.lly835.bestpay.model.PayResponse;
 import com.lly835.bestpay.service.BestPayService;
 import com.natsumes.entity.PayInfo;
-import com.natsumes.service.PayService;
-import com.natsumes.vo.ResponseVo;
 import com.natsumes.enums.PayPlatformEnum;
 import com.natsumes.mapper.PayInfoMapper;
+import com.natsumes.service.PayService;
+import com.natsumes.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,20 +25,20 @@ import java.math.BigDecimal;
 @Service
 public class PayServiceImpl implements PayService {
 
-	private static final String QUEUE_PAY_NOTIFY = "payNotify";
+    private static final String QUEUE_PAY_NOTIFY = "payNotify";
 
-	@Autowired
-	private BestPayService bestPayService;
+    @Autowired
+    private BestPayService bestPayService;
 
-	@Autowired
-	private PayInfoMapper payInfoMapper;
+    @Autowired
+    private PayInfoMapper payInfoMapper;
 
-	@Autowired
-	private AmqpTemplate amqpTemplate;
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
-	@Override
-	public ResponseVo<PayResponse> create(Integer userId, String orderId, String openId, BigDecimal amount, BestPayTypeEnum payTypeEnum) {
-		//已存在, 查询
+    @Override
+    public ResponseVo<PayResponse> create(Integer userId, String orderId, String openId, BigDecimal amount, BestPayTypeEnum payTypeEnum) {
+        //已存在, 查询
         PayInfo payInfo = payInfoMapper.selectByByOrderNo(orderId);
         if (payInfo == null) {
 
@@ -52,80 +52,80 @@ public class PayServiceImpl implements PayService {
             payInfoMapper.insertSelective(payInfo);
         }
 
-		if (payTypeEnum != BestPayTypeEnum.WXPAY_NATIVE
+        if (payTypeEnum != BestPayTypeEnum.WXPAY_NATIVE
                 && payTypeEnum != BestPayTypeEnum.WXPAY_MINI
                 && payTypeEnum != BestPayTypeEnum.ALIPAY_PC) {
-			throw new RuntimeException("暂不支持的支付类型");
-		}
+            throw new RuntimeException("暂不支持的支付类型");
+        }
 
-		PayRequest request = new PayRequest();
-		request.setOrderName("2361478-最好的支付SDK");
-		request.setOrderId(orderId);
-		request.setOrderAmount(amount.doubleValue());
-		request.setPayTypeEnum(payTypeEnum);
-		request.setOpenid(openId);
-		PayResponse response = bestPayService.pay(request);
+        PayRequest request = new PayRequest();
+        request.setOrderName("2361478-最好的支付SDK");
+        request.setOrderId(orderId);
+        request.setOrderAmount(amount.doubleValue());
+        request.setPayTypeEnum(payTypeEnum);
+        request.setOpenid(openId);
+        PayResponse response = bestPayService.pay(request);
 
-		response.setOrderId(orderId);
+        response.setOrderId(orderId);
         response.setOrderAmount(amount.doubleValue());
         response.setPayPlatformEnum(payTypeEnum.getPlatform());
         //存储信息
         log.info("response: " + response);
         return ResponseVo.success(response);
-	}
+    }
 
-	@Override
-	public String asyncNotify(String notifyData) {
-		//1.签名校验
-		PayResponse response = bestPayService.asyncNotify(notifyData);
-		log.info("response={}", response);
+    @Override
+    public String asyncNotify(String notifyData) {
+        //1.签名校验
+        PayResponse response = bestPayService.asyncNotify(notifyData);
+        log.info("response={}", response);
 
-		//2.金额校验（从数据库查订单）
-		//比较严重（正常情况下是不会发生的）发出告警：钉钉、短信
-		PayInfo payInfo = payInfoMapper.selectByByOrderNo(response.getOrderId());
-		if (payInfo == null) {
-			//todo:
-			throw new RuntimeException("通过orderNo查询到的结果是null");
-		}
+        //2.金额校验（从数据库查订单）
+        //比较严重（正常情况下是不会发生的）发出告警：钉钉、短信
+        PayInfo payInfo = payInfoMapper.selectByByOrderNo(response.getOrderId());
+        if (payInfo == null) {
+            //todo:
+            throw new RuntimeException("通过orderNo查询到的结果是null");
+        }
 
-		//如果订单支付状态不是"已支付"
-		if (!payInfo.getPlatformStatus().equals(OrderStatusEnum.SUCCESS.name())) {
-			//Double类型比较大小，精度。1.00  1.0
-			if (payInfo.getPayAmount().compareTo(BigDecimal.valueOf(response.getOrderAmount())) != 0) {
-				//todo:告警
-				throw new RuntimeException("异步通知中的金额和数据库里的不一致，orderNo=" + response.getOrderId());
-			}
+        //如果订单支付状态不是"已支付"
+        if (!payInfo.getPlatformStatus().equals(OrderStatusEnum.SUCCESS.name())) {
+            //Double类型比较大小，精度。1.00  1.0
+            if (payInfo.getPayAmount().compareTo(BigDecimal.valueOf(response.getOrderAmount())) != 0) {
+                //todo:告警
+                throw new RuntimeException("异步通知中的金额和数据库里的不一致，orderNo=" + response.getOrderId());
+            }
 
-			//3. 修改订单支付状态
-			payInfo.setPlatformStatus(OrderStatusEnum.SUCCESS.name());
-			payInfo.setPlatformNumber(response.getOutTradeNo());
-			payInfoMapper.updateByPrimaryKeySelective(payInfo);
-		}
+            //3. 修改订单支付状态
+            payInfo.setPlatformStatus(OrderStatusEnum.SUCCESS.name());
+            payInfo.setPlatformNumber(response.getOutTradeNo());
+            payInfoMapper.updateByPrimaryKeySelective(payInfo);
+        }
 
-		//TODO totoro发送MQ消息，natsume接受MQ消息, payInfoVo
+        //TODO totoro发送MQ消息，natsume接受MQ消息, payInfoVo
 
-		amqpTemplate.convertAndSend(QUEUE_PAY_NOTIFY, JSON.toJSONString(payInfo));
+        amqpTemplate.convertAndSend(QUEUE_PAY_NOTIFY, JSON.toJSONString(payInfo));
 
-		if (response.getPayPlatformEnum() == BestPayPlatformEnum.WX) {
-			//4.告诉微信不要在通知了
-			return "<xml>\n" +
-					"  <return_code><![CDATA[SUCCESS]]></return_code>\n" +
-					"  <return_msg><![CDATA[OK]]></return_msg>\n" +
-					"</xml>";
-		} else if (response.getPayPlatformEnum() == BestPayPlatformEnum.ALIPAY) {
-			return "success";
-		}
+        if (response.getPayPlatformEnum() == BestPayPlatformEnum.WX) {
+            //4.告诉微信不要在通知了
+            return "<xml>\n" +
+                    "  <return_code><![CDATA[SUCCESS]]></return_code>\n" +
+                    "  <return_msg><![CDATA[OK]]></return_msg>\n" +
+                    "</xml>";
+        } else if (response.getPayPlatformEnum() == BestPayPlatformEnum.ALIPAY) {
+            return "success";
+        }
 
-		throw new RuntimeException("异步通知中错误的支付平台");
-	}
+        throw new RuntimeException("异步通知中错误的支付平台");
+    }
 
-	@Override
-	public PayInfo queryByOrderId(String orderId) {
-		return payInfoMapper.selectByByOrderNo(orderId);
-	}
+    @Override
+    public PayInfo queryByOrderId(String orderId) {
+        return payInfoMapper.selectByByOrderNo(orderId);
+    }
 
-	//查询订单接口
-    private String query( String orderId, BestPayTypeEnum payTypeEnum) {
+    //查询订单接口
+    private String query(String orderId, BestPayTypeEnum payTypeEnum) {
         PayInfo payInfo = payInfoMapper.selectByByOrderNo(orderId);
         if (payInfo != null) {
             OrderQueryRequest queryRequest = new OrderQueryRequest();

@@ -7,13 +7,13 @@ import java.util.List;
 @Data
 public class CategoryVo {
 
-	private Integer id;
+    private Integer id;
 
-	private Integer parentId;
+    private Integer parentId;
 
-	private String name;
+    private String name;
 
-	private Integer sortOrder;
+    private Integer sortOrder;
 
-	private List<CategoryVo> subCategories;
+    private List<CategoryVo> subCategories;
 }

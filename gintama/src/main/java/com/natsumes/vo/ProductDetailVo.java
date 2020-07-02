@@ -7,27 +7,27 @@ import java.util.Date;
 
 @Data
 public class ProductDetailVo {
-	private Integer id;
+    private Integer id;
 
-	private Integer categoryId;
+    private Integer categoryId;
 
-	private String name;
+    private String name;
 
-	private String subtitle;
+    private String subtitle;
 
-	private String mainImage;
+    private String mainImage;
 
-	private String subImages;
+    private String subImages;
 
-	private String detail;
+    private String detail;
 
-	private BigDecimal price;
+    private BigDecimal price;
 
-	private Integer stock;
+    private Integer stock;
 
-	private Integer status;
+    private Integer status;
 
-	private Date createTime;
+    private Date createTime;
 
-	private Date updateTime;
+    private Date updateTime;
 }

@@ -18,35 +18,36 @@ import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+
 import static com.natsumes.enums.ResponseEnum.*;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-	@Autowired
-	private UserMapper userMapper;
+    @Autowired
+    private UserMapper userMapper;
 
-	@Autowired
+    @Autowired
     private WxConfig wxConfig;
 
-	@Autowired
+    @Autowired
     private RestTemplate restTemplate;
 
-	@Override
-	public ResponseVo<User> register(User user) {
-		//username 不能重复
-		int countByUsername = userMapper.countByUsername(user.getUsername());
-		if (countByUsername > 0) {
-			return ResponseVo.error(USERNAME_EXIST);
-		}
+    @Override
+    public ResponseVo<User> register(User user) {
+        //username 不能重复
+        int countByUsername = userMapper.countByUsername(user.getUsername());
+        if (countByUsername > 0) {
+            return ResponseVo.error(USERNAME_EXIST);
+        }
 
-		//email 不能重复
+        //email 不能重复
 //		int countByEmail = userMapper.countByEmail(user.getEmail());
 //		if (countByEmail > 0) {
 //			return ResponseVo.error(EMAIL_EXIST);
 //		}
 
-		//检验推广父id是否有效
+        //检验推广父id是否有效
         if (user.getParentId() == null) {
             user.setParentId(0);
         }
@@ -56,42 +57,42 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setRole(RoleEnum.ADMIN.getCode());
-		//MD5摘要算法(Spring 自带)
-		user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes(StandardCharsets.UTF_8)));
+        //MD5摘要算法(Spring 自带)
+        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes(StandardCharsets.UTF_8)));
 
-		//写入数据库
-		int resultCount = userMapper.insertSelective(user);
-		if (resultCount == 0) {
-			return ResponseVo.error(SYSTEM_ERROR, "写入数据库异常, 注册失败");
-		}
-		return ResponseVo.success();
-	}
+        //写入数据库
+        int resultCount = userMapper.insertSelective(user);
+        if (resultCount == 0) {
+            return ResponseVo.error(SYSTEM_ERROR, "写入数据库异常, 注册失败");
+        }
+        return ResponseVo.success();
+    }
 
-	//cookie 跨域
-	//todo: session保存在内存里, 改进版本: token+redis
-	@Override
-	public ResponseVo<User> login(String username, String password) {
-		User user = userMapper.selectByUsername(username);
-		if (user == null) {
-			//用户不存在(返回: 用户名或密码错误)
-			return ResponseVo.error(USERNAME_OR_PASSWORD_ERROR);
-		}
-		if (!user.getPassword().equalsIgnoreCase(DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8)))) {
-			//密码错误(返回: 用户名或密码错误)
-			return ResponseVo.error(USERNAME_OR_PASSWORD_ERROR);
-		}
+    //cookie 跨域
+    //todo: session保存在内存里, 改进版本: token+redis
+    @Override
+    public ResponseVo<User> login(String username, String password) {
+        User user = userMapper.selectByUsername(username);
+        if (user == null) {
+            //用户不存在(返回: 用户名或密码错误)
+            return ResponseVo.error(USERNAME_OR_PASSWORD_ERROR);
+        }
+        if (!user.getPassword().equalsIgnoreCase(DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8)))) {
+            //密码错误(返回: 用户名或密码错误)
+            return ResponseVo.error(USERNAME_OR_PASSWORD_ERROR);
+        }
 
-		user.setPassword("");
+        user.setPassword("");
 
-		return ResponseVo.success(user);
-	}
+        return ResponseVo.success(user);
+    }
 
     @Override
     public ResponseVo<User> wxLogin(WeChartForm weChartForm) {
 
 
         String url = wxConfig.getOpenIdUrl() + "?appid=" + wxConfig.getAppId()
-                + "&secret=" + wxConfig.getMchKey()+ "&js_code="
+                + "&secret=" + wxConfig.getMchKey() + "&js_code="
                 + weChartForm.getUserCode() + "&grant_type=authorization_code";
 
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
@@ -107,7 +108,7 @@ public class UserServiceImpl implements UserService {
         String openId = responseBody.getString("openid");
         String sessionKey = responseBody.getString("session_key");
 
-        User user = userMapper.selectByUsername(openId); //openId为用户的username
+        User user = userMapper.selectByOpenid(openId); //openId为用户的username
         if (user == null) {
             //用户不存在(返回: 用户名或密码错误) , 自动注册
             user = new User();
@@ -116,7 +117,8 @@ public class UserServiceImpl implements UserService {
             //存储sessionKey
             user.setPassword(sessionKey);
             user.setParentId(0);
-            user.setUsername(openId);
+            user.setUsername(weChartForm.getUsername());
+            user.setOpenid(openId);
 
             //写入数据库
             int resultCount = userMapper.insertSelective(user);
@@ -126,6 +128,7 @@ public class UserServiceImpl implements UserService {
         } else {
             //更新sessionKey
             user.setPassword(sessionKey);
+            user.setUsername(weChartForm.getUsername());
             userMapper.updateByPrimaryKey(user);
         }
         return ResponseVo.success(user);
@@ -133,11 +136,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseVo blind(Integer uid, Integer parentId) {
-	    if (parentId == 0) {
-	        return ResponseVo.success();
+        if (parentId == 0) {
+            return ResponseVo.success();
         }
 
-	    //判断此用户是否绑定不为0的父Id
+        //判断此用户是否绑定不为0的父Id
         User user = userMapper.selectByPrimaryKey(uid);
         //已绑定，直接返回已绑定
         if (user.getParentId() != 0) {

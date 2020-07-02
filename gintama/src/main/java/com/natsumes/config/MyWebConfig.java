@@ -14,20 +14,19 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@EnableScheduling
 public class MyWebConfig implements WebMvcConfigurer {
 
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(userLoginInterceptor())
-				.addPathPatterns("/**")
-				.excludePathPatterns("/user/login", "/user/wechart", "/user/register", "/categories", "/products", "/products/*", "/error");
-	}
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(userLoginInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns("/user/login", "/user/wechart", "/user/register", "/categories", "/products", "/products/*", "/error");
+    }
 
-	@Bean
-	public UserLoginInterceptor userLoginInterceptor() {
-		return new UserLoginInterceptor();
-	}
+    @Bean
+    public UserLoginInterceptor userLoginInterceptor() {
+        return new UserLoginInterceptor();
+    }
 
     @Bean
     public RestTemplate httpsRestTemplate(HttpComponentsClientHttpRequestFactory httpsFactory) {

@@ -21,25 +21,25 @@ import java.math.BigDecimal;
 @Transactional
 public class ProductServiceImplTest extends ApplicationTests {
 
-	@Autowired
-	private ProductService productService;
+    @Autowired
+    private ProductService productService;
 
-	@Test
-	public void list() {
-		ResponseVo<PageInfo> responseVo = productService.list(null, 1, 2);
-		log.info("responseVo={}", JSONUtils.printFormat(responseVo));
-		Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
-	}
+    @Test
+    public void list() {
+        ResponseVo<PageInfo> responseVo = productService.list(null, 1, 2);
+        log.info("responseVo={}", JSONUtils.printFormat(responseVo));
+        Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
+    }
 
 
-	@Test
-	public void detail() {
-		ResponseVo<ProductDetailVo> detail = productService.detail(26);
-		log.info("responseVo={}", JSONUtils.printFormat(detail));
-		Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), detail.getStatus());
-	}
+    @Test
+    public void detail() {
+        ResponseVo<ProductDetailVo> detail = productService.detail(26);
+        log.info("responseVo={}", JSONUtils.printFormat(detail));
+        Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), detail.getStatus());
+    }
 
-	@Test
+    @Test
     public void search() {
         SearchForm searchForm = new SearchForm("华为", new BigDecimal(100), new BigDecimal(1000), null);
         ResponseVo<PageInfo> detail = productService.search(searchForm, 1, 2);

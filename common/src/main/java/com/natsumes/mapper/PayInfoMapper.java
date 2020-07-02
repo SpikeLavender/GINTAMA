@@ -15,5 +15,5 @@ public interface PayInfoMapper {
 
     int updateByPrimaryKey(PayInfo record);
 
-	PayInfo selectByByOrderNo(String orderNo);
+    PayInfo selectByByOrderNo(String orderNo);
 }

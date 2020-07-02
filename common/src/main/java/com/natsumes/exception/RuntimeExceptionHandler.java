@@ -16,25 +16,25 @@ import static com.natsumes.enums.ResponseEnum.*;
 @ControllerAdvice
 public class RuntimeExceptionHandler {
 
-	@ExceptionHandler(RuntimeException.class)
-	@ResponseBody
-	//@ResponseStatus(HttpStatus.FORBIDDEN)
-	public ResponseVo handle(RuntimeException e) {
-		return ResponseVo.error(SYSTEM_ERROR, e.getMessage());
-	}
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseBody
+    //@ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseVo handle(RuntimeException e) {
+        return ResponseVo.error(SYSTEM_ERROR, e.getMessage());
+    }
 
-	@ExceptionHandler(UserLoginException.class)
-	@ResponseBody
-	public ResponseVo userLoginExceptionHandle() {
-		return ResponseVo.error(NEED_LOGIN);
-	}
+    @ExceptionHandler(UserLoginException.class)
+    @ResponseBody
+    public ResponseVo userLoginExceptionHandle() {
+        return ResponseVo.error(NEED_LOGIN);
+    }
 
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	@ResponseBody
-	public ResponseVo notValidExceptionHandle(MethodArgumentNotValidException e) {
-		BindingResult bindingResult = e.getBindingResult();
-		log.error("注册提交的参数有误, {} {}", Objects.requireNonNull(bindingResult.getFieldError()).getField(),
-				bindingResult.getFieldError().getDefaultMessage());
-		return ResponseVo.error(PARAM_ERROR, bindingResult);
-	}
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    public ResponseVo notValidExceptionHandle(MethodArgumentNotValidException e) {
+        BindingResult bindingResult = e.getBindingResult();
+        log.error("注册提交的参数有误, {} {}", Objects.requireNonNull(bindingResult.getFieldError()).getField(),
+                bindingResult.getFieldError().getDefaultMessage());
+        return ResponseVo.error(PARAM_ERROR, bindingResult);
+    }
 }

@@ -1,24 +1,24 @@
 package com.nastumes.service.impl;
 
 import com.nastumes.WezardApplicationTests;
-import com.nastumes.service.AchievementService;
+import com.nastumes.service.ProfitScheduleService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Slf4j
-public class AchievementServiceImplTest extends WezardApplicationTests {
+public class ProfitScheduleServiceImplTest extends WezardApplicationTests {
 
     @Autowired
-    private AchievementService achievementService;
+    private ProfitScheduleService profitScheduleService;
 
     @Test
     public void weekAchievement() {
-        achievementService.weekAchievement();
+        profitScheduleService.weekAchievement();
     }
 
     @Test
     public void curWeekAchievement() {
-        achievementService.curWeekAchievement();
+        profitScheduleService.curWeekAchievement();
     }
 }

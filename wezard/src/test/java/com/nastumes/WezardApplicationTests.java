@@ -11,9 +11,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 @Slf4j
 public class WezardApplicationTests {
 
-	@Test
-	public void contextLoads() {
+    @Test
+    public void contextLoads() {
 
-	}
+    }
 
 }

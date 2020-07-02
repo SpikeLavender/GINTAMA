@@ -18,18 +18,18 @@ import org.springframework.stereotype.Component;
 @RabbitListener(queues = "payNotify")
 public class PayMsgListener {
 
-	@Autowired
-	private OrderService orderService;
+    @Autowired
+    private OrderService orderService;
 
-	@RabbitHandler
-	public void process(String msg) {
-		log.info("接收到消息 => {}", msg);
-		PayInfo payInfo = JSON.parseObject(msg, PayInfo.class);
+    @RabbitHandler
+    public void process(String msg) {
+        log.info("接收到消息 => {}", msg);
+        PayInfo payInfo = JSON.parseObject(msg, PayInfo.class);
 
-		if (payInfo.getPlatformStatus().equals("SUCCESS")) {
-			//修改订单里的状态
-			orderService.paid(payInfo.getOrderNo());
-		}
+        if (payInfo.getPlatformStatus().equals("SUCCESS")) {
+            //修改订单里的状态
+            orderService.paid(payInfo.getOrderNo());
+        }
 
-	}
+    }
 }

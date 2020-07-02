@@ -7,9 +7,9 @@ import javax.validation.constraints.NotNull;
 @Data
 public class OrderCreateForm {
 
-	@NotNull
-	private Integer shippingId;
+    @NotNull
+    private Integer shippingId;
 
-	private Integer productNum;
+    private Integer productNum;
 
 }

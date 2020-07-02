@@ -26,7 +26,7 @@ public class HttpUtils {
         return client(url, HttpMethod.POST, headers, params);
     }
 
-    private static String client(String url, HttpMethod method, HttpHeaders headers, MultiValueMap<String, String> params){
+    private static String client(String url, HttpMethod method, HttpHeaders headers, MultiValueMap<String, String> params) {
         RestTemplate client = new RestTemplate();
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
         //  执行HTTP请求

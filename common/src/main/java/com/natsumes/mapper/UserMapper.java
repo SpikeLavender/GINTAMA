@@ -21,9 +21,13 @@ public interface UserMapper {
 
     int countByUsername(String username);
 
+    int countByOpenid(String openid);
+
     int countByEmail(String email);
 
     User selectByUsername(String username);
+
+    User selectByOpenid(String openid);
 
     List<User> selectByParentId(Integer parentId);
 

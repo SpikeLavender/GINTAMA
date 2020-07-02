@@ -19,7 +19,7 @@ public interface OrderItemMapper {
 
     int updateByPrimaryKey(OrderItem record);
 
-	int batchInsert(@Param("orderItems") List<OrderItem> orderItems);
+    int batchInsert(@Param("orderItems") List<OrderItem> orderItems);
 
-	List<OrderItem> selectByOrderNoSet(@Param("orderNoSet") Set<String> orderNoSet);
+    List<OrderItem> selectByOrderNoSet(@Param("orderNoSet") Set<String> orderNoSet);
 }
