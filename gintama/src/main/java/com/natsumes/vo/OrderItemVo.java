@@ -8,19 +8,19 @@ import java.util.Date;
 @Data
 public class OrderItemVo {
 
-	private String orderNo;
+    private String orderNo;
 
-	private Integer productId;
+    private Integer productId;
 
-	private String productName;
+    private String productName;
 
-	private String productImage;
+    private String productImage;
 
-	private BigDecimal currentUnitPrice;
+    private BigDecimal currentUnitPrice;
 
-	private Integer quantity;
+    private Integer quantity;
 
-	private BigDecimal totalPrice;
+    private BigDecimal totalPrice;
 
-	private Date createTime;
+    private Date createTime;
 }

@@ -20,9 +20,9 @@ public interface ProductMapper {
 
     int updateByPrimaryKey(Product record);
 
-	List<Product> selectByCategoryIdSet(@Param("categoryIdSet") Set<Integer> categoryIdSet);
+    List<Product> selectByCategoryIdSet(@Param("categoryIdSet") Set<Integer> categoryIdSet);
 
-	List<Product> selectByProductIdSet(@Param("productIdSet") Set<Integer> productIdSet);
+    List<Product> selectByProductIdSet(@Param("productIdSet") Set<Integer> productIdSet);
 
     List<Product> selectSelective(@Param("categoryIdSet") Set<Integer> categoryIdSet, @Param("searchForm") SearchForm searchForm);
 

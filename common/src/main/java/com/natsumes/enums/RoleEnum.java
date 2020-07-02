@@ -4,15 +4,15 @@ import lombok.Getter;
 
 @Getter
 public enum RoleEnum {
-	ADMIN(0),
+    ADMIN(0),
 
-	CUSTOMER(1),
+    CUSTOMER(1),
 
-	;
+    ;
 
-	Integer code;
+    Integer code;
 
-	RoleEnum(Integer code) {
-		this.code = code;
-	}
+    RoleEnum(Integer code) {
+        this.code = code;
+    }
 }

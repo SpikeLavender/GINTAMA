@@ -29,50 +29,50 @@ import static com.natsumes.enums.ResponseEnum.PRODUCT_OFF_SALE_OR_DELETE;
 @Slf4j
 public class ProductServiceImpl implements ProductService {
 
-	@Autowired
-	private CategoryService categoryService;
+    @Autowired
+    private CategoryService categoryService;
 
-	@Autowired
-	private ProductMapper productMapper;
+    @Autowired
+    private ProductMapper productMapper;
 
-	@Override
-	public ResponseVo<PageInfo> list(Integer categoryId, Integer pageNum, Integer pageSize) {
-		Set<Integer> categoryIdSet = new HashSet<>();
+    @Override
+    public ResponseVo<PageInfo> list(Integer categoryId, Integer pageNum, Integer pageSize) {
+        Set<Integer> categoryIdSet = new HashSet<>();
 
-		if (categoryId != null) {
-			categoryService.findSubCategoryId(categoryId, categoryIdSet);
-			categoryIdSet.add(categoryId);
-		}
+        if (categoryId != null) {
+            categoryService.findSubCategoryId(categoryId, categoryIdSet);
+            categoryIdSet.add(categoryId);
+        }
 
-		PageHelper.startPage(pageNum, pageSize);
-		List<Product> products = productMapper.selectByCategoryIdSet(categoryIdSet);
+        PageHelper.startPage(pageNum, pageSize);
+        List<Product> products = productMapper.selectByCategoryIdSet(categoryIdSet);
         return getPageInfoResponseVo(products);
     }
 
-	@Override
-	public ResponseVo<ProductDetailVo> detail(Integer productId) {
-		Product product = productMapper.selectByPrimaryKey(productId);
+    @Override
+    public ResponseVo<ProductDetailVo> detail(Integer productId) {
+        Product product = productMapper.selectByPrimaryKey(productId);
 
-		if (product == null) {
-			return ResponseVo.error(PRODUCT_NOT_EXIST);
-		}
+        if (product == null) {
+            return ResponseVo.error(PRODUCT_NOT_EXIST);
+        }
 
-		if (product.getStatus().equals(OFF_SALE.getCode()) || product.getStatus().equals(DELETE.getCode())) {
-			return ResponseVo.error(PRODUCT_OFF_SALE_OR_DELETE);
-		}
+        if (product.getStatus().equals(OFF_SALE.getCode()) || product.getStatus().equals(DELETE.getCode())) {
+            return ResponseVo.error(PRODUCT_OFF_SALE_OR_DELETE);
+        }
 
-		ProductDetailVo productDetailVo = new ProductDetailVo();
-		BeanUtils.copyProperties(product, productDetailVo);
+        ProductDetailVo productDetailVo = new ProductDetailVo();
+        BeanUtils.copyProperties(product, productDetailVo);
 
-		//敏感数据处理
-		productDetailVo.setStock(product.getStock() > 100 ? 100 : product.getStock());
+        //敏感数据处理
+        productDetailVo.setStock(product.getStock() > 100 ? 100 : product.getStock());
 
-		return ResponseVo.success(productDetailVo);
-	}
+        return ResponseVo.success(productDetailVo);
+    }
 
     @Override
     public ResponseVo<PageInfo> search(SearchForm searchForm, Integer pageNum, Integer pageSize) {
-	    //根据不同条件去查询
+        //根据不同条件去查询
         Set<Integer> categoryIdSet = new HashSet<>();
 
         if (searchForm.getCategoryId() != null) {

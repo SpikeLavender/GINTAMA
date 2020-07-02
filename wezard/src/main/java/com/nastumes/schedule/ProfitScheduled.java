@@ -1,7 +1,7 @@
 package com.nastumes.schedule;
 
 
-import com.nastumes.service.AchievementService;
+import com.nastumes.service.ProfitScheduleService;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component;
 @Component
 @MapperScan("com.natsumes.mapper")
 @Order(value = 1)
-public class AchievementScheduled implements ApplicationRunner {
+public class ProfitScheduled implements ApplicationRunner {
 
     @Autowired
-    private AchievementService achievementService;
+    private ProfitScheduleService profitScheduleService;
 
     /**
      * 创建全部周业绩条目
@@ -27,7 +27,7 @@ public class AchievementScheduled implements ApplicationRunner {
     //@Scheduled(cron = "* */${scheduled.week.interval} * * * *")
 //    @Scheduled(cron = "${scheduled.week.cron}") //每天的13，18，21点执行一次 "0 0 0,13,18,21 * * ?"
 //    public void weekAchievement() {
-//        //achievementService.weekAchievement();
+//        //profitScheduleService.weekAchievement();
 //    }
 //
 //    /**
@@ -36,9 +36,8 @@ public class AchievementScheduled implements ApplicationRunner {
 //     */
 //    @Scheduled(fixedRateString = "${scheduled.week.fixedRate}")
 //    public void curWeekAchievement() {
-//        //achievementService.curWeekAchievement();
+//        //profitScheduleService.curWeekAchievement();
 //    }
-
     @Override
     public void run(ApplicationArguments args) {
         // weekAchievement();
@@ -52,7 +51,7 @@ public class AchievementScheduled implements ApplicationRunner {
     //@Scheduled(cron = "* */${scheduled.week.interval} * * * *")
     @Scheduled(cron = "${scheduled.month.cron}") //每天的13，18，21点执行一次 "0 0 0,13,18,21 * * ?"
     public void monthAchievement() {
-        achievementService.monthAchievement();
+        profitScheduleService.monthAchievement();
     }
 
     /**
@@ -61,6 +60,6 @@ public class AchievementScheduled implements ApplicationRunner {
      */
     @Scheduled(fixedRateString = "${scheduled.month.fixedRate}")
     public void curMonthAchievement() {
-        achievementService.curMonthAchievement();
+        profitScheduleService.curMonthAchievement();
     }
 }

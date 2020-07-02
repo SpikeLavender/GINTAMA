@@ -20,22 +20,22 @@ import java.util.Set;
 @Slf4j
 public class CategoryServiceImplTest extends ApplicationTests {
 
-	@Autowired
-	private CategoryService categoryService;
+    @Autowired
+    private CategoryService categoryService;
 
-	@Test
-	public void selectAll() {
-		ResponseVo<List<CategoryVo>> responseVo = categoryService.selectAll();
-		log.info("data={}", JSONUtils.printFormat(responseVo));
-		Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
-	}
+    @Test
+    public void selectAll() {
+        ResponseVo<List<CategoryVo>> responseVo = categoryService.selectAll();
+        log.info("data={}", JSONUtils.printFormat(responseVo));
+        Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
+    }
 
 
-	@Test
-	public void findSubCategoryId() {
-		Set<Integer> resultSet = new HashSet<>();
-		categoryService.findSubCategoryId(100001, resultSet);
-		log.info("set = {}", JSONUtils.printFormat(resultSet));
-	}
+    @Test
+    public void findSubCategoryId() {
+        Set<Integer> resultSet = new HashSet<>();
+        categoryService.findSubCategoryId(100001, resultSet);
+        log.info("set = {}", JSONUtils.printFormat(resultSet));
+    }
 
 }

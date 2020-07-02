@@ -20,28 +20,28 @@ import static com.natsumes.consts.NatsumeConst.CURRENT_USER;
 @Slf4j
 public class UserController {
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	@PostMapping("/user/register")
-	public ResponseVo register(@Valid @RequestBody UserRegisterForm userRegisterForm) {
+    @PostMapping("/user/register")
+    public ResponseVo register(@Valid @RequestBody UserRegisterForm userRegisterForm) {
 
-		User user = new User();
-		BeanUtils.copyProperties(userRegisterForm, user);
+        User user = new User();
+        BeanUtils.copyProperties(userRegisterForm, user);
 
-		return userService.register(user);
-	}
+        return userService.register(user);
+    }
 
-	@PostMapping("/user/login")
-	public ResponseVo<User> login(@Valid @RequestBody UserLoginForm userLoginForm, HttpSession session) {
+    @PostMapping("/user/login")
+    public ResponseVo<User> login(@Valid @RequestBody UserLoginForm userLoginForm, HttpSession session) {
 
-		ResponseVo<User> userResponseVo = userService.login(userLoginForm.getUsername(), userLoginForm.getPassword());
+        ResponseVo<User> userResponseVo = userService.login(userLoginForm.getUsername(), userLoginForm.getPassword());
 
-		//设置 Session
-		session.setAttribute(CURRENT_USER, userResponseVo.getData());
-		log.info("login sessionId = {}", session.getId());
-		return userResponseVo;
-	}
+        //设置 Session
+        session.setAttribute(CURRENT_USER, userResponseVo.getData());
+        log.info("login sessionId = {}", session.getId());
+        return userResponseVo;
+    }
 
     @PostMapping("/user/wechart")
     public ResponseVo<User> wechart(@Valid @RequestBody WeChartForm userForm, HttpSession session) {
@@ -54,22 +54,22 @@ public class UserController {
         return userResponseVo;
     }
 
-	@GetMapping("/user")
-	public ResponseVo<User> login(HttpSession session) {
-		log.info("user sessionId = {}", session.getId());
-		User user = (User) session.getAttribute(CURRENT_USER);
-		return ResponseVo.success(user);
-	}
+    @GetMapping("/user")
+    public ResponseVo<User> login(HttpSession session) {
+        log.info("user sessionId = {}", session.getId());
+        User user = (User) session.getAttribute(CURRENT_USER);
+        return ResponseVo.success(user);
+    }
 
-	@PostMapping("/user/logout")
-	public ResponseVo<User> logout(HttpSession session) {
-		log.info("logout sessionId = {}", session.getId());
+    @PostMapping("/user/logout")
+    public ResponseVo<User> logout(HttpSession session) {
+        log.info("logout sessionId = {}", session.getId());
 
-		session.removeAttribute(CURRENT_USER);
-		return ResponseVo.success();
-	}
+        session.removeAttribute(CURRENT_USER);
+        return ResponseVo.success();
+    }
 
-	@PostMapping("/user/{parentId}")
+    @PostMapping("/user/{parentId}")
     public ResponseVo blind(@PathVariable Integer parentId,
                             HttpSession session) {
         User user = (User) session.getAttribute(CURRENT_USER);

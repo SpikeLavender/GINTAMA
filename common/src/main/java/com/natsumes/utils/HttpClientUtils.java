@@ -52,10 +52,10 @@ public class HttpClientUtils {
 
         // now, we create connection-manager using our Registry.
         //      -- allows multi-threaded use
-        PoolingHttpClientConnectionManager connMgr = new PoolingHttpClientConnectionManager( socketFactoryRegistry);
+        PoolingHttpClientConnectionManager connMgr = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
         connMgr.setMaxTotal(200);
         connMgr.setDefaultMaxPerRoute(100);
-        clientBuilder.setConnectionManager( connMgr);
+        clientBuilder.setConnectionManager(connMgr);
 
         // finally, build the HttpClient;
         //      -- done!

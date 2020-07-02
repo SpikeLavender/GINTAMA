@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
 
 
-	@Autowired
-	private CategoryService categoryService;
+    @Autowired
+    private CategoryService categoryService;
 
-	@GetMapping("/categories")
-	public ResponseVo selectAll() {
-		return categoryService.selectAll();
-	}
+    @GetMapping("/categories")
+    public ResponseVo selectAll() {
+        return categoryService.selectAll();
+    }
 }

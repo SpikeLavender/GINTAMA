@@ -1,5 +1,7 @@
 package com.nastumes.service.impl;
 
+import com.nastumes.entity.IDVo;
+import com.nastumes.service.ProfitScheduleService;
 import com.natsumes.entity.Achievement;
 import com.natsumes.entity.Order;
 import com.natsumes.entity.User;
@@ -10,8 +12,6 @@ import com.natsumes.mapper.OrderMapper;
 import com.natsumes.mapper.UserMapper;
 import com.natsumes.utils.DateUtils;
 import com.natsumes.utils.JSONUtils;
-import com.nastumes.entity.IDVo;
-import com.nastumes.service.AchievementService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ import static com.natsumes.consts.NatsumeConst.ROOT_USER_PARENT_ID;
 
 @Slf4j
 @Service
-public class AchievementServiceImpl implements AchievementService {
+public class ProfitScheduleServiceImpl implements ProfitScheduleService {
 
     @Autowired
     private UserMapper userMapper;
@@ -37,7 +37,6 @@ public class AchievementServiceImpl implements AchievementService {
 
     @Autowired
     private AchievementMapper achievementMapper;
-
 
 
     @Override
@@ -67,6 +66,7 @@ public class AchievementServiceImpl implements AchievementService {
     /**
      * 创建全部周业绩条目
      * 每 fixedRate 执行一次，刷新本周业绩
+     *
      * @return List<Achievement>
      */
     private List<Achievement> buildWeekAchievement() {
@@ -80,6 +80,7 @@ public class AchievementServiceImpl implements AchievementService {
     /**
      * 创建本周业绩
      * 每 fixedRate 执行一次，刷新本周业绩，30min
+     *
      * @return
      */
     private List<Achievement> buildCurWeekAchievement() {
@@ -94,6 +95,7 @@ public class AchievementServiceImpl implements AchievementService {
 
     /**
      * 按周拆分 {"startTime": [order1, order2]}
+     *
      * @param orders
      * @return
      */
@@ -116,6 +118,7 @@ public class AchievementServiceImpl implements AchievementService {
     /**
      * 创建全部周业绩条目
      * 每 fixedRate 执行一次，刷新本周业绩
+     *
      * @return List<Achievement>
      */
     private List<Achievement> buildMonthAchievement() {
@@ -129,6 +132,7 @@ public class AchievementServiceImpl implements AchievementService {
     /**
      * 创建本周业绩
      * 每 fixedRate 执行一次，刷新本周业绩，30min
+     *
      * @return
      */
     private List<Achievement> buildCurMonthAchievement() {
@@ -143,6 +147,7 @@ public class AchievementServiceImpl implements AchievementService {
 
     /**
      * 按周拆分 {"startTime": [order1, order2]}
+     *
      * @param orders
      * @return
      */
@@ -164,6 +169,7 @@ public class AchievementServiceImpl implements AchievementService {
 
     /**
      * 创建订单条目
+     *
      * @param ordersMap
      * @return
      */
@@ -190,6 +196,7 @@ public class AchievementServiceImpl implements AchievementService {
 
     /**
      * 计算总业绩
+     *
      * @param orders
      * @return
      */

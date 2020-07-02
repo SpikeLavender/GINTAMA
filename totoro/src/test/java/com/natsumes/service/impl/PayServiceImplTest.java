@@ -12,21 +12,21 @@ import java.math.BigDecimal;
 
 public class PayServiceImplTest extends PayApplicationTests {
 
-	@Autowired
-	private PayService payService;
+    @Autowired
+    private PayService payService;
 
-	@Autowired
-	private AmqpTemplate amqpTemplate;
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
-	@Test
-	public void create() {
-		//BigDecimal.valueOf(0.01)
-		//new BigDecimal("0.01")
-		payService.create(1, "12345678999977777", "otWwL4xgnqsAfTMhm-pFSuTcRURA", BigDecimal.valueOf(0.01), BestPayTypeEnum.WXPAY_MINI);
-	}
+    @Test
+    public void create() {
+        //BigDecimal.valueOf(0.01)
+        //new BigDecimal("0.01")
+        payService.create(1, "12345678999977777", "otWwL4xgnqsAfTMhm-pFSuTcRURA", BigDecimal.valueOf(0.01), BestPayTypeEnum.WXPAY_MINI);
+    }
 
-	@Test
-	public void sendMQMsg() {
-		amqpTemplate.convertAndSend("payNotify", "hello world");
-	}
+    @Test
+    public void sendMQMsg() {
+        amqpTemplate.convertAndSend("payNotify", "hello world");
+    }
 }

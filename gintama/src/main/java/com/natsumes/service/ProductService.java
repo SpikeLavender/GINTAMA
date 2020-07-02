@@ -8,9 +8,9 @@ import com.natsumes.vo.ResponseVo;
 
 public interface ProductService {
 
-	ResponseVo<PageInfo> list(Integer categoryId, Integer pageNum, Integer pageSize);
+    ResponseVo<PageInfo> list(Integer categoryId, Integer pageNum, Integer pageSize);
 
-	ResponseVo<ProductDetailVo> detail(Integer productId);
+    ResponseVo<ProductDetailVo> detail(Integer productId);
 
     ResponseVo<PageInfo> search(SearchForm searchForm, Integer pageNum, Integer pageSize);
 

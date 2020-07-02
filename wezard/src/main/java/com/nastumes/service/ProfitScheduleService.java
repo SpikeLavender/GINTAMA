@@ -1,6 +1,6 @@
 package com.nastumes.service;
 
-public interface AchievementService {
+public interface ProfitScheduleService {
 
     void weekAchievement();
 

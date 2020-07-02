@@ -10,30 +10,30 @@ import java.util.List;
 @Data
 public class OrderVo {
 
-	private String orderNo;
+    private String orderNo;
 
-	private BigDecimal payment;
+    private BigDecimal payment;
 
-	private Integer paymentType;
+    private Integer paymentType;
 
-	private Integer postage;
+    private Integer postage;
 
-	private Integer status;
+    private Integer status;
 
-	private Date paymentTime;
+    private Date paymentTime;
 
-	private Date sendTime;
+    private Date sendTime;
 
-	private Date endTime;
+    private Date endTime;
 
-	private Date closeTime;
+    private Date closeTime;
 
-	private Date createTime;
+    private Date createTime;
 
-	private List<OrderItemVo> orderItemVoList;
+    private List<OrderItemVo> orderItemVoList;
 
-	private Integer shippingId;
+    private Integer shippingId;
 
-	private Shipping shippingVo;
+    private Shipping shippingVo;
 
 }

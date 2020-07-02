@@ -21,63 +21,63 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class OrderServiceImplTest extends ApplicationTests {
 
-	@Autowired
-	private OrderService orderService;
+    @Autowired
+    private OrderService orderService;
 
-	@Autowired
-	private CartService cartService;
+    @Autowired
+    private CartService cartService;
 
-	private Integer uId = 1;
+    private Integer uId = 1;
 
-	private Integer shippingId = 4;
+    private Integer shippingId = 4;
 
-	private Integer productId = 29;
+    private Integer productId = 29;
 
-	@Before
-	public void add() {
-		log.info("新增购物车");
-		CartAddForm cartAddForm = new CartAddForm();
-		cartAddForm.setProductId(productId);
-		cartAddForm.setSelected(true);
+    @Before
+    public void add() {
+        log.info("新增购物车");
+        CartAddForm cartAddForm = new CartAddForm();
+        cartAddForm.setProductId(productId);
+        cartAddForm.setSelected(true);
 
-		ResponseVo<CartVo> responseVo = cartService.add(uId, cartAddForm);
-		Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
-	}
+        ResponseVo<CartVo> responseVo = cartService.add(uId, cartAddForm);
+        Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
+    }
 
-	@Test
-	public void createTest() {
-		ResponseVo<OrderVo> responseVo = create();
-		Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
-		log.info("responseVo={}", JSONUtils.printFormat(responseVo));
-	}
+    @Test
+    public void createTest() {
+        ResponseVo<OrderVo> responseVo = create();
+        Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
+        log.info("responseVo={}", JSONUtils.printFormat(responseVo));
+    }
 
-	private ResponseVo<OrderVo> create() {
-		ResponseVo<OrderVo> responseVo = orderService.create(uId, shippingId);
-		log.info("set up responseVo={}", JSONUtils.printFormat(responseVo));
-		Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
-		return responseVo;
-	}
+    private ResponseVo<OrderVo> create() {
+        ResponseVo<OrderVo> responseVo = orderService.create(uId, shippingId);
+        log.info("set up responseVo={}", JSONUtils.printFormat(responseVo));
+        Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
+        return responseVo;
+    }
 
-	@Test
-	public void list() {
-		ResponseVo<PageInfo> responseVo = orderService.list(uId, 1, 2);
-		log.info("responseVo={}", JSONUtils.printFormat(responseVo));
-		Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
-	}
+    @Test
+    public void list() {
+        ResponseVo<PageInfo> responseVo = orderService.list(uId, 1, 2);
+        log.info("responseVo={}", JSONUtils.printFormat(responseVo));
+        Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
+    }
 
-	@Test
-	public void detail() {
-		ResponseVo<OrderVo> orderVoResponseVo = create();
-		ResponseVo<OrderVo> responseVo = orderService.detail(uId, orderVoResponseVo.getData().getOrderNo());
-		log.info("responseVo={}", JSONUtils.printFormat(responseVo));
-		Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
-	}
+    @Test
+    public void detail() {
+        ResponseVo<OrderVo> orderVoResponseVo = create();
+        ResponseVo<OrderVo> responseVo = orderService.detail(uId, orderVoResponseVo.getData().getOrderNo());
+        log.info("responseVo={}", JSONUtils.printFormat(responseVo));
+        Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
+    }
 
-	@Test
-	public void cancel() {
-		ResponseVo<OrderVo> orderVoResponseVo = create();
-		ResponseVo responseVo = orderService.cancel(uId, orderVoResponseVo.getData().getOrderNo());
-		log.info("responseVo={}", JSONUtils.printFormat(responseVo));
-		Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
-	}
+    @Test
+    public void cancel() {
+        ResponseVo<OrderVo> orderVoResponseVo = create();
+        ResponseVo responseVo = orderService.cancel(uId, orderVoResponseVo.getData().getOrderNo());
+        log.info("responseVo={}", JSONUtils.printFormat(responseVo));
+        Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
+    }
 }

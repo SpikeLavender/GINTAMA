@@ -23,11 +23,11 @@ import static com.natsumes.enums.ResponseEnum.SYSTEM_ERROR;
 @Service
 public class ShippingServiceImpl implements ShippingService {
 
-	@Autowired
-	private ShippingMapper shippingMapper;
+    @Autowired
+    private ShippingMapper shippingMapper;
 
     @Override
-	public ResponseVo<Map<String, Integer>> add(Integer uId, ShippingForm form) {
+    public ResponseVo<Map<String, Integer>> add(Integer uId, ShippingForm form) {
 
         Shipping shipping = new Shipping();
         BeanUtils.copyProperties(form, shipping);
@@ -48,22 +48,22 @@ public class ShippingServiceImpl implements ShippingService {
             return ResponseVo.error(SYSTEM_ERROR);
         }
         //判断是否为默认，是的话更新其他的为false
-		Map<String, Integer> map = new HashMap<>();
-		map.put("shippingId", shipping.getId());
-		return ResponseVo.success(map);
-	}
+        Map<String, Integer> map = new HashMap<>();
+        map.put("shippingId", shipping.getId());
+        return ResponseVo.success(map);
+    }
 
-	@Override
-	public ResponseVo delete(Integer uId, Integer shippingId) {
-		int row = shippingMapper.deleteByIdAndUid(uId, shippingId);
-		if (row == 0) {
-			return ResponseVo.error(DELETE_SHIPPING_FAIL);
-		}
-		return ResponseVo.success();
-	}
+    @Override
+    public ResponseVo delete(Integer uId, Integer shippingId) {
+        int row = shippingMapper.deleteByIdAndUid(uId, shippingId);
+        if (row == 0) {
+            return ResponseVo.error(DELETE_SHIPPING_FAIL);
+        }
+        return ResponseVo.success();
+    }
 
-	@Override
-	public ResponseVo update(Integer uId, Integer shippingId, ShippingForm form) {
+    @Override
+    public ResponseVo update(Integer uId, Integer shippingId, ShippingForm form) {
         Shipping shipping = new Shipping();
         BeanUtils.copyProperties(form, shipping);
         shipping.setUserId(uId);
@@ -80,18 +80,18 @@ public class ShippingServiceImpl implements ShippingService {
 
         shippings.add(shipping);
 
-		int row = shippingMapper.updateBatch(shippings);
-		if (row <= shippings.size()) {
-			return ResponseVo.error(SYSTEM_ERROR);
-		}
-		return ResponseVo.success();
-	}
+        int row = shippingMapper.updateBatch(shippings);
+        if (row <= shippings.size()) {
+            return ResponseVo.error(SYSTEM_ERROR);
+        }
+        return ResponseVo.success();
+    }
 
-	@Override
-	public ResponseVo<PageInfo> list(Integer uId, Integer pageNum, Integer pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
-		List<Shipping> shippings = shippingMapper.selectByUid(uId);
-		PageInfo<Shipping> pageInfo = new PageInfo<>(shippings);
-		return ResponseVo.success(pageInfo);
-	}
+    @Override
+    public ResponseVo<PageInfo> list(Integer uId, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Shipping> shippings = shippingMapper.selectByUid(uId);
+        PageInfo<Shipping> pageInfo = new PageInfo<>(shippings);
+        return ResponseVo.success(pageInfo);
+    }
 }

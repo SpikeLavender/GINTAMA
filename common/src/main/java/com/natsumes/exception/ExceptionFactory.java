@@ -2,12 +2,12 @@ package com.natsumes.exception;
 
 public class ExceptionFactory {
 
-	private ExceptionFactory() {
+    private ExceptionFactory() {
 
-	}
+    }
 
-	public static RuntimeException wrapException(String message, Exception e) {
-		return new NatsumeException(e.getClass().getSimpleName() + ": " + message, e);
-	}
+    public static RuntimeException wrapException(String message, Exception e) {
+        return new NatsumeException(e.getClass().getSimpleName() + ": " + message, e);
+    }
 
 }
