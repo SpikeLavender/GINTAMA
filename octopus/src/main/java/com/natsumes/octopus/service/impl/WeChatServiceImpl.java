@@ -34,10 +34,9 @@ public class WeChatServiceImpl implements WeChatService {
 
     /**
      * 设置token
-     * @return
      */
-    //@Scheduled(fixedRateString = "${}")
-    public Boolean setAccessToken() {
+    @Scheduled(fixedRateString = "${wx.schedule.fixedRate}")
+    public void setAccessToken() {
 
         String accessUrl = String.format(weChatConfig.getAccessTokenUrl(),
                 "&appid=", weChatConfig.getAppId(), "&secret=", weChatConfig.getMchKey());
@@ -47,13 +46,13 @@ public class WeChatServiceImpl implements WeChatService {
 
         if (!HttpStatus.OK.equals(responseEntity.getStatusCode())) {
             log.error("get access token error: {}", responseEntity.getStatusCode());
-            return false;
+            return;
         }
 
         JSONObject responseBody = JSONUtils.parseObject(responseEntity.getBody());
         if (responseBody.containsKey("errcode")) {
             log.error("get access token error: {}", responseBody.toJSONString());
-            return false;
+            return;
         }
 
         Long expiresIn = responseBody.getLong("expires_in");
@@ -64,6 +63,5 @@ public class WeChatServiceImpl implements WeChatService {
         opsForValue.set(String.format(ACCESS_TOKEN_REDIS_KEY, weChatConfig.getAppId()), accessToken,
                 expiresIn, TimeUnit.SECONDS);
 
-        return true;
     }
 }
