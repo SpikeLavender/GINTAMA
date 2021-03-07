@@ -1,6 +1,3 @@
-server:
-  port: 8090
-
 # Mysql数据库连接配置: com.mysql.cj.jdbc.Driver
 spring:
   application:
@@ -22,29 +19,6 @@ spring:
         namespace: ${spring.cloud.nacos.discovery.namespace}
         group: DEFAULT_GROUP
         file-extension: yaml
-    sentinel:
-      transport:
-        dashboard: 127.0.0.1:8080 #sentinel dashboard/console address
-        port: 8719  #  sentinel会在该端口启动http server，那么这样的话，控制台定义的一些限流等规则才能发送传递过来，
-                    #如果8719端口被占用，那么会依次+1
-                    # Sentinel Nacos数据源配置，Nacos中的规则会自动同步到sentinel流控规则中
-      datasource:
-        flow:
-          nacos:
-            server-addr: ${spring.cloud.nacos.discovery.server-addr}
-            data-id: ${spring.application.name}-flow-rules
-            namespace: ${spring.cloud.nacos.discovery.namespace}
-            groupId: DEFAULT_GROUP
-            data-type: json
-            rule-type: flow
-        degrade:
-          nacos:
-            server-addr: ${spring.cloud.nacos.discovery.server-addr}
-            data-id: ${spring.application.name}-degrade-rules
-            namespace: ${spring.cloud.nacos.discovery.namespace}
-            groupId: DEFAULT_GROUP
-            data-type: json
-            rule-type: degrade
     stream:
       binders:
         myRabbitBinder:
@@ -100,3 +74,6 @@ management:
 logging:
   level:
     com.alibaba.nacos.client.naming: error
+
+server:
+  port: 8080

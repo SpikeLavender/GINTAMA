@@ -1,24 +1,21 @@
 package com.natsumes.wezard.service.impl;
 
-import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.natsumes.wezard.enums.ProductStatusEnum;
+import com.natsumes.wezard.entity.Response;
 import com.natsumes.wezard.entity.form.SearchForm;
+import com.natsumes.wezard.entity.vo.ProductDetailVo;
+import com.natsumes.wezard.entity.vo.ProductVo;
+import com.natsumes.wezard.enums.ProductStatusEnum;
 import com.natsumes.wezard.enums.ResponseEnum;
-import com.natsumes.wezard.interceptor.SentinelHandlers;
 import com.natsumes.wezard.mapper.ProductMapper;
 import com.natsumes.wezard.pojo.Product;
 import com.natsumes.wezard.service.CategoryService;
-import com.natsumes.wezard.entity.Response;
-import com.natsumes.wezard.entity.vo.ProductDetailVo;
-import com.natsumes.wezard.entity.vo.ProductVo;
 import com.natsumes.wezard.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -40,13 +37,6 @@ public class ProductServiceImpl implements ProductService {
     private ProductMapper productMapper;
 
     @Override
-    @SentinelResource(value = "QueryAllProduct",
-            blockHandlerClass = SentinelHandlers.class,
-            blockHandler = "handleException",
-            fallbackClass = SentinelHandlers.class,
-            fallback = "handleError",
-            exceptionsToIgnore= {MethodArgumentNotValidException.class}
-    )
     public Response<PageInfo> list(Integer categoryId, Integer pageNum, Integer pageSize) {
         Set<Integer> categoryIdSet = new HashSet<>();
 
