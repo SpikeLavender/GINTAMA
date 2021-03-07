@@ -13,3 +13,12 @@ dependencies {
     implementation 'com.alibaba.cloud:spring-cloud-starter-dubbo'
     implementation 'com.alibaba.csp:sentinel-apache-dubbo-adapter:1.6.3'
 }
+
+jar {
+    enabled = true
+    version = '0.0.1'
+    manifest {
+        attributes "Manifest-Version": 1.0,
+                'Main-Class': 'com.natsumes.wezard.PayApplication'
+    }
+}
