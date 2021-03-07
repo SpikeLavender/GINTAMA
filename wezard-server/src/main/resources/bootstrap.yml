@@ -66,6 +66,19 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
+# mybatis配置
+mybatis:
+  configuration:
+    #开启驼峰命名匹配映射
+    map-underscore-to-camel-case: true
+    # 控制台日志配置
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #配置mybatis的xml映射配置文件路径
+  mapper-locations: classpath:mapper/*.xml
+  #配置mybatis映射配置文件中实体类别名
+  type-aliases-package: com.natsumes.wezard.pojo
+
+
 # pagehelper 配置
 pagehelper:
   auto-dialect: true

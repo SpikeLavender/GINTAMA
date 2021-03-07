@@ -1,8 +1,5 @@
 package com.natsumes.wezard.listener;
 
-import com.natsumes.wezard.enums.OrderStatusEnum;
-import com.natsumes.wezard.enums.ResponseEnum;
-import com.natsumes.wezard.pojo.Order;
 import com.natsumes.wezard.pojo.PayInfo;
 import com.natsumes.wezard.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +9,6 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.messaging.Message;
 
-import java.util.Date;
 
 /**
  * @author  hetengjiao
